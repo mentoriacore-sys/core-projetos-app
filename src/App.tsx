@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import Login from './pages/auth/Login'
 import AdminLayout from './pages/admin/AdminLayout'
+import Dashboard from './pages/admin/Dashboard'
 import ClientsList from './pages/admin/clients/ClientsList'
 import ClientForm from './pages/admin/clients/ClientForm'
 import ProjectsList from './pages/admin/projects/ProjectsList'
@@ -16,7 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
 
           <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Navigate to="/admin/projetos" replace />} />
+            <Route index element={<Dashboard />} />
             <Route path="clientes" element={<ClientsList />} />
             <Route path="clientes/novo" element={<ClientForm />} />
             <Route path="clientes/:id" element={<ClientForm />} />

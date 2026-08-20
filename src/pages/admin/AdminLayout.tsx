@@ -22,6 +22,9 @@ export default function AdminLayout() {
       <aside className="admin-sidebar">
         <div className="admin-brand">C.O.R.E. Projetos</div>
         <nav>
+          <NavLink to="/admin" end className={({ isActive }) => (isActive ? 'active' : '')}>
+            Dashboard
+          </NavLink>
           <NavLink to="/admin/clientes" className={({ isActive }) => (isActive ? 'active' : '')}>
             Clientes
           </NavLink>
