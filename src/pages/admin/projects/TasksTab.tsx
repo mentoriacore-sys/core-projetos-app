@@ -3,6 +3,7 @@ import { listStages } from '../../../services/supabase/stages'
 import { createTask, deleteTask, listTasksByProject, updateTask, type TaskInput } from '../../../services/supabase/tasks'
 import { STAGE_STATUS_OPTIONS, VISIBILITY_OPTIONS } from '../../../types/database'
 import type { ProjectStage, Task } from '../../../types/database'
+import { getErrorMessage } from '../../../lib/errorMessage'
 
 interface Props {
   projectId: string
@@ -38,7 +39,7 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
       setTasks(t)
       setStages(s)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao carregar tarefas')
+      setError(getErrorMessage(err, 'Erro ao carregar tarefas'))
     } finally {
       setLoading(false)
     }
@@ -72,7 +73,7 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
       await reload()
       onProgressChange()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao salvar tarefa')
+      setError(getErrorMessage(err, 'Erro ao salvar tarefa'))
     }
   }
 

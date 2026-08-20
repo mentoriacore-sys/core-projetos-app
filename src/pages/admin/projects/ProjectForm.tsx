@@ -14,6 +14,7 @@ import {
 } from '../../../types/database'
 import type { Client } from '../../../types/database'
 import { useDraftState } from '../../../hooks/useDraftState'
+import { getErrorMessage } from '../../../lib/errorMessage'
 
 type ProjectInputType = ProjectInput
 import '../../../components/common/admin-ui.css'
@@ -107,7 +108,7 @@ export default function ProjectForm() {
         navigate(`/admin/projetos/${created.id}`)
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao salvar')
+      setError(getErrorMessage(err, 'Erro ao salvar'))
     } finally {
       setSaving(false)
     }

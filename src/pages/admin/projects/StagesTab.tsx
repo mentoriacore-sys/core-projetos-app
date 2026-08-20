@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { createStage, deleteStage, listStages, updateStage, type StageInput } from '../../../services/supabase/stages'
 import { STAGE_STATUS_OPTIONS, VISIBILITY_OPTIONS } from '../../../types/database'
 import type { ProjectStage } from '../../../types/database'
+import { getErrorMessage } from '../../../lib/errorMessage'
 
 interface Props {
   projectId: string
@@ -36,7 +37,7 @@ export default function StagesTab({ projectId, onProgressChange }: Props) {
     try {
       setStages(await listStages(projectId))
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao carregar etapas')
+      setError(getErrorMessage(err, 'Erro ao carregar etapas'))
     } finally {
       setLoading(false)
     }
@@ -83,7 +84,7 @@ export default function StagesTab({ projectId, onProgressChange }: Props) {
       await reload()
       onProgressChange()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao salvar etapa')
+      setError(getErrorMessage(err, 'Erro ao salvar etapa'))
     }
   }
 
