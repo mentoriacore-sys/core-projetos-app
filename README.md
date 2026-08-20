@@ -28,6 +28,7 @@ Status: Fase 0 a 5 concluídas — login, layout administrativo, CRUD de cliente
 - `npm run migrate` — aplica migrations pendentes de `supabase/migrations/` (precisa de `DATABASE_URL` no `.env`, ver `.env.example`)
 - `npm run verify:db` — lista tabelas e confirma se o RLS está habilitado
 - `npm run promote-admin -- email@exemplo.com` — promove um usuário já cadastrado ao papel `admin`
+- `npm run import-project -- payload.json [--dry-run]` — cadastra cliente + projeto + etapas + tarefas + entregáveis a partir de um JSON estruturado (ver `docs/PROCESSO_IMPORTACAO_PROJETO.md`)
 
 ## Deploy
 

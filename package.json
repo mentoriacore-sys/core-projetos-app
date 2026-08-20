@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "migrate": "node --env-file=.env scripts/migrate.mjs",
     "verify:db": "node --env-file=.env scripts/verify.mjs",
-    "promote-admin": "node --env-file=.env scripts/promote-admin.mjs"
+    "promote-admin": "node --env-file=.env scripts/promote-admin.mjs",
+    "import-project": "node --env-file=.env scripts/import-project.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
