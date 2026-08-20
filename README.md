@@ -7,7 +7,7 @@ Aplicação **independente** da Base C.O.R.E. — código, repositório, deploy 
 Especificação completa: [`docs/CORE_PROJETOS_SPEC_V1.md`](docs/CORE_PROJETOS_SPEC_V1.md)
 Instruções permanentes de desenvolvimento: [`CLAUDE.md`](CLAUDE.md)
 
-Status: Fase 0 a 4 concluídas — login, layout administrativo, CRUD de clientes/projetos, página do projeto completa (Visão Geral, Etapas, Tarefas, Entregáveis, Dependências, Documentos, Decisões, Riscos, Alteração de Escopo, Histórico automático) e progresso calculado automaticamente pelo banco.
+Status: Fase 0 a 5 concluídas — login, layout administrativo, CRUD de clientes/projetos, página do projeto completa (Visão Geral, Etapas, Tarefas, Entregáveis, Dependências, Documentos, Decisões, Riscos, Alteração de Escopo, Histórico automático), progresso calculado automaticamente e Dashboard (indicadores, Central de Atenção, Aguardando Cliente).
 
 ## Rodando localmente
 
