@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Construir o **C.O.R.E. Projetos**, aplicação web independente para gestão e acompanhamento dos projetos personalizados executados para clientes da Metodologia C.O.R.E., seguindo estritamente `docs/CORE_PROJETOS_SPEC_V1.md`.
+Construir o **C.O.R.E. Projetos**, aplicação web independente para gestão e acompanhamento dos projetos personalizados executados para clientes da Metodologia C.O.R.E., seguindo estritamente `docs/CORE_PROJETOS_SPEC_V1.md` e as decisões registradas em `docs/DECISIONS.md`.
 
 Este projeto é **separado da Base C.O.R.E.** (outro repositório, outra aplicação, outro escopo). Não é uma tela nem um módulo da Base C.O.R.E.
 

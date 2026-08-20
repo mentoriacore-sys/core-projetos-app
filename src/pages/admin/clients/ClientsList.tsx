@@ -56,7 +56,7 @@ export default function ClientsList() {
               <th>Nome</th>
               <th>Empresa</th>
               <th>E-mail</th>
-              <th>Status</th>
+              <th>Telefone</th>
             </tr>
           </thead>
           <tbody>
@@ -66,7 +66,7 @@ export default function ClientsList() {
                 <td>{c.name}</td>
                 <td>{c.company || '—'}</td>
                 <td>{c.email || '—'}</td>
-                <td>{c.status ? <span className="status-badge">{c.status}</span> : '—'}</td>
+                <td>{c.phone || '—'}</td>
               </tr>
             ))}
           </tbody>

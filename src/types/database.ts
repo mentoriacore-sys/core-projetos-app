@@ -27,7 +27,6 @@ export interface Client {
   segment: string | null
   origin: (typeof CLIENT_ORIGIN_OPTIONS)[number] | null
   internal_note: string | null
-  status: string | null
   base_core_client_id: string | null
   created_at: string
   updated_at: string

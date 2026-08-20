@@ -13,7 +13,6 @@ const emptyForm: ClientInput = {
   segment: '',
   origin: null,
   internal_note: '',
-  status: '',
   base_core_client_id: null,
 }
 
@@ -46,7 +45,6 @@ export default function ClientForm() {
             segment: c.segment,
             origin: c.origin,
             internal_note: c.internal_note,
-            status: c.status,
             base_core_client_id: c.base_core_client_id,
           })
         }
@@ -131,10 +129,6 @@ export default function ClientForm() {
                 </option>
               ))}
             </select>
-          </label>
-          <label>
-            Status
-            <input value={form.status ?? ''} onChange={(e) => update('status', e.target.value)} />
           </label>
           <label>
             ID do cliente na Base C.O.R.E. (se houver)
