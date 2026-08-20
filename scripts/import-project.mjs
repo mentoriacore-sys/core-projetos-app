@@ -21,7 +21,10 @@
 //   "stages": [
 //     { "name": "...", "description": "...", "objective": "...", "stage_order": 1,
 //       "expected_start": "YYYY-MM-DD", "expected_end": "YYYY-MM-DD",
-//       "tasks": [ { "title": "...", "description": "...", "expected_date": "YYYY-MM-DD" } ],
+//       "tasks": [ { "title": "...", "description": "...", "expected_date": "YYYY-MM-DD",
+//                    "responsible": "C.O.R.E." | "Cliente" | "Terceiro" | "Equipe" | "Nenhuma" | null,
+//                    "status": "Não iniciada" (padrão) | "Concluída" | ...,
+//                    "completed_at": "YYYY-MM-DDTHH:MM:SSZ" } ],
 //       "deliverables": [ { "name": "...", "description": "...", "due_date": "YYYY-MM-DD",
 //                            "requires_approval": true } ]
 //     }
@@ -114,9 +117,12 @@ async function main() {
 
       for (const task of stage.tasks ?? []) {
         const taskRes = await client.query(
-          `insert into tasks (stage_id, project_id, title, description, expected_date)
-           values ($1,$2,$3,$4,$5) returning id`,
-          [stageId, projectId, task.title, task.description ?? null, task.expected_date ?? null],
+          `insert into tasks (stage_id, project_id, title, description, expected_date, responsible, status, completed_at)
+           values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`,
+          [
+            stageId, projectId, task.title, task.description ?? null, task.expected_date ?? null,
+            task.responsible ?? null, task.status ?? 'Não iniciada', task.completed_at ?? null,
+          ],
         )
         stageSummary.tasks.push({ id: taskRes.rows[0].id, title: task.title })
       }

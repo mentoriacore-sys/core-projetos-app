@@ -121,6 +121,7 @@ export interface Task {
   project_id: string
   title: string
   description: string | null
+  responsible: (typeof RESPONSIBILITY_OPTIONS)[number] | null
   priority: string | null
   status: (typeof STAGE_STATUS_OPTIONS)[number]
   expected_date: string | null

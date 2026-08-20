@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { listStages } from '../../../services/supabase/stages'
 import { createTask, deleteTask, listTasksByProject, updateTask, type TaskInput } from '../../../services/supabase/tasks'
-import { STAGE_STATUS_OPTIONS, VISIBILITY_OPTIONS } from '../../../types/database'
+import { STAGE_STATUS_OPTIONS, VISIBILITY_OPTIONS, RESPONSIBILITY_OPTIONS } from '../../../types/database'
 import type { ProjectStage, Task } from '../../../types/database'
 import { getErrorMessage } from '../../../lib/errorMessage'
 
@@ -16,12 +16,23 @@ function emptyForm(projectId: string, stageId: string): TaskInput {
     stage_id: stageId,
     title: '',
     description: '',
+    responsible: null,
     priority: '',
     status: 'Não iniciada',
     expected_date: null,
     visibility: 'both',
     notes: '',
   }
+}
+
+function isLate(task: Task) {
+  if (!task.completed_at || !task.expected_date) return false
+  return task.completed_at.slice(0, 10) > task.expected_date
+}
+
+function isEarlyOrOnTime(task: Task) {
+  if (!task.completed_at || !task.expected_date) return false
+  return task.completed_at.slice(0, 10) <= task.expected_date
 }
 
 export default function TasksTab({ projectId, onProgressChange }: Props) {
@@ -121,6 +132,20 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
               <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
             </label>
             <label>
+              Responsável
+              <select
+                value={form.responsible ?? ''}
+                onChange={(e) => setForm({ ...form, responsible: (e.target.value || null) as TaskInput['responsible'] })}
+              >
+                <option value="">—</option>
+                {RESPONSIBILITY_OPTIONS.map((r) => (
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
               Prioridade
               <input value={form.priority ?? ''} onChange={(e) => setForm({ ...form, priority: e.target.value })} />
             </label>
@@ -135,7 +160,7 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
               </select>
             </label>
             <label>
-              Data prevista
+              Prazo
               <input
                 type="date"
                 value={form.expected_date ?? ''}
@@ -174,9 +199,10 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
             <tr>
               <th>Tarefa</th>
               <th>Etapa</th>
-              <th>Prioridade</th>
-              <th>Data prevista</th>
+              <th>Responsável</th>
+              <th>Prazo</th>
               <th>Status</th>
+              <th>Concluído em</th>
               <th></th>
             </tr>
           </thead>
@@ -185,7 +211,7 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
               <tr key={task.id}>
                 <td>{task.title}</td>
                 <td>{stageName(task.stage_id)}</td>
-                <td>{task.priority || '—'}</td>
+                <td>{task.responsible ?? '—'}</td>
                 <td>{task.expected_date || '—'}</td>
                 <td>
                   <select value={task.status} onChange={(e) => handleStatusChange(task, e.target.value as Task['status'])}>
@@ -195,6 +221,16 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
                       </option>
                     ))}
                   </select>
+                </td>
+                <td>
+                  {task.completed_at ? (
+                    <span style={{ color: isLate(task) ? '#b91c1c' : isEarlyOrOnTime(task) ? '#166534' : undefined }}>
+                      {task.completed_at.slice(0, 10)}
+                      {isLate(task) && ' (atrasado)'}
+                    </span>
+                  ) : (
+                    '—'
+                  )}
                 </td>
                 <td>
                   <div className="row-actions">
