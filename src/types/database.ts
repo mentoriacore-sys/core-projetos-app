@@ -81,3 +81,53 @@ export interface Project {
 export interface ProjectWithClient extends Project {
   clients: Pick<Client, 'id' | 'code' | 'name'> | null
 }
+
+export const STAGE_STATUS_OPTIONS = [
+  'Não iniciada',
+  'Em andamento',
+  'Aguardando',
+  'Em revisão',
+  'Concluída',
+  'Cancelada',
+] as const
+
+export const VISIBILITY_OPTIONS = [
+  { value: 'both', label: 'Interno + Cliente' },
+  { value: 'internal', label: 'Somente interno' },
+  { value: 'client', label: 'Somente cliente' },
+] as const
+
+export interface ProjectStage {
+  id: string
+  project_id: string
+  name: string
+  description: string | null
+  objective: string | null
+  stage_order: number
+  expected_start: string | null
+  expected_end: string | null
+  actual_start: string | null
+  actual_end: string | null
+  status: (typeof STAGE_STATUS_OPTIONS)[number]
+  progress: number
+  visibility: 'internal' | 'client' | 'both'
+  notes: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface Task {
+  id: string
+  stage_id: string
+  project_id: string
+  title: string
+  description: string | null
+  priority: string | null
+  status: (typeof STAGE_STATUS_OPTIONS)[number]
+  expected_date: string | null
+  completed_at: string | null
+  visibility: 'internal' | 'client' | 'both'
+  notes: string | null
+  created_at: string
+  updated_at: string
+}

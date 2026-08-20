@@ -19,28 +19,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
 
-  async function loadProfile(userId: string) {
-    const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
-    setProfile(data as Profile | null)
+  async function resolveSession(newSession: Session | null) {
+    setLoading(true)
+    setSession(newSession)
+    if (!newSession) {
+      setProfile(null)
+      setLoading(false)
+      return
+    }
+    const { data } = await supabase.from('profiles').select('*').eq('id', newSession.user.id).single()
+    setProfile((data as Profile | null) ?? null)
+    setLoading(false)
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session)
-      if (data.session) {
-        loadProfile(data.session.user.id).finally(() => setLoading(false))
-      } else {
-        setLoading(false)
-      }
-    })
+    supabase.auth.getSession().then(({ data }) => resolveSession(data.session))
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession)
-      if (newSession) {
-        loadProfile(newSession.user.id)
-      } else {
-        setProfile(null)
-      }
+      resolveSession(newSession)
     })
 
     return () => listener.subscription.unsubscribe()

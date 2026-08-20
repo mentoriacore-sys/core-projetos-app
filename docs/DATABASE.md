@@ -26,5 +26,6 @@ Versionadas em `supabase/migrations/`:
 
 - `0001_schema.sql` — tabelas, constraints, índices, códigos amigáveis (CLI-/PRJ-/CHM-)
 - `0002_auth_and_rls.sql` — bootstrap de `profiles`, funções de autorização, RLS habilitado em todas as tabelas
+- `0003_progress_triggers.sql` — cálculo automático de progresso (seção 21): progresso da etapa = tarefas concluídas / válidas; progresso do projeto = média das etapas ativas. Recalculado via trigger sempre que uma tarefa ou etapa muda de status — nunca digitado manualmente. Testado manualmente na Fase 3 (0% → 50% → 100% ao concluir tarefas).
 
-Pendente para a Fase 2/6 (quando existir login para testar de verdade): políticas RLS específicas de `team` e `client` — ver `docs/RLS_POLICIES.md`.
+Pendente para a Fase 6 (quando existir Portal do Cliente para testar de verdade): políticas RLS específicas de `team` e `client` — ver `docs/RLS_POLICIES.md`.

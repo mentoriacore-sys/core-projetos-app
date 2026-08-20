@@ -6,6 +6,7 @@ import ClientsList from './pages/admin/clients/ClientsList'
 import ClientForm from './pages/admin/clients/ClientForm'
 import ProjectsList from './pages/admin/projects/ProjectsList'
 import ProjectForm from './pages/admin/projects/ProjectForm'
+import ProjectDetail from './pages/admin/projects/ProjectDetail'
 
 function App() {
   return (
@@ -21,7 +22,8 @@ function App() {
             <Route path="clientes/:id" element={<ClientForm />} />
             <Route path="projetos" element={<ProjectsList />} />
             <Route path="projetos/novo" element={<ProjectForm />} />
-            <Route path="projetos/:id" element={<ProjectForm />} />
+            <Route path="projetos/:id" element={<ProjectDetail />} />
+            <Route path="projetos/:id/editar" element={<ProjectForm />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/admin" replace />} />

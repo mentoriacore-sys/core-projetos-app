@@ -93,10 +93,11 @@ export default function ProjectForm() {
     try {
       if (isEdit && id) {
         await updateProject(id, form)
+        navigate(`/admin/projetos/${id}`)
       } else {
-        await createProject(form)
+        const created = await createProject(form)
+        navigate(`/admin/projetos/${created.id}`)
       }
-      navigate('/admin/projetos')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao salvar')
     } finally {
@@ -251,7 +252,11 @@ export default function ProjectForm() {
           <button type="submit" className="btn-primary" disabled={saving}>
             {saving ? 'Salvando...' : 'Salvar'}
           </button>
-          <button type="button" className="btn-secondary" onClick={() => navigate('/admin/projetos')}>
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={() => navigate(isEdit && id ? `/admin/projetos/${id}` : '/admin/projetos')}
+          >
             Cancelar
           </button>
         </div>

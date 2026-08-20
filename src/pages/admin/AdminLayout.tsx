@@ -8,7 +8,7 @@ export default function AdminLayout() {
   if (loading) return <div className="admin-loading">Carregando...</div>
   if (!session) return <Navigate to="/login" replace />
 
-  if (profile && profile.role !== 'admin') {
+  if (!profile || profile.role !== 'admin') {
     return (
       <div className="admin-loading">
         <p>Seu acesso ainda está sendo configurado. Fale com a administradora.</p>
