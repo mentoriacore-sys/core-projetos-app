@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { createClient, getClient, updateClient, type ClientInput } from '../../../services/supabase/clients'
 import { CLIENT_ORIGIN_OPTIONS } from '../../../types/database'
+import { useDraftState } from '../../../hooks/useDraftState'
 import '../../../components/common/admin-ui.css'
 
 const emptyForm: ClientInput = {
@@ -20,32 +21,39 @@ export default function ClientForm() {
   const { id } = useParams()
   const isEdit = Boolean(id)
   const navigate = useNavigate()
+  const draftKey = isEdit ? `draft:client:edit:${id}` : 'draft:client:new'
 
-  const [form, setForm] = useState<ClientInput>(emptyForm)
+  const [form, setForm, clearDraft] = useDraftState<ClientInput>(draftKey, emptyForm)
   const [code, setCode] = useState<string | null>(null)
   const [loading, setLoading] = useState(isEdit)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [restoredDraft] = useState(() => Boolean(localStorage.getItem(draftKey)))
 
   useEffect(() => {
     if (!id) return
     getClient(id)
       .then((c) => {
-        setForm({
-          name: c.name,
-          company: c.company,
-          email: c.email,
-          phone: c.phone,
-          segment: c.segment,
-          origin: c.origin,
-          internal_note: c.internal_note,
-          status: c.status,
-          base_core_client_id: c.base_core_client_id,
-        })
         setCode(c.code)
+        // Se já existe um rascunho salvo (a aba recarregou com dados não salvos),
+        // mantemos o rascunho em vez de sobrescrever com o que está no servidor.
+        if (!restoredDraft) {
+          setForm({
+            name: c.name,
+            company: c.company,
+            email: c.email,
+            phone: c.phone,
+            segment: c.segment,
+            origin: c.origin,
+            internal_note: c.internal_note,
+            status: c.status,
+            base_core_client_id: c.base_core_client_id,
+          })
+        }
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   function update<K extends keyof ClientInput>(key: K, value: ClientInput[K]) {
@@ -62,6 +70,7 @@ export default function ClientForm() {
       } else {
         await createClient(form)
       }
+      clearDraft()
       navigate('/admin/clientes')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao salvar')
@@ -77,6 +86,10 @@ export default function ClientForm() {
       <div className="page-header">
         <h1>{isEdit ? `Editar cliente ${code ?? ''}` : 'Novo cliente'}</h1>
       </div>
+
+      {restoredDraft && (
+        <p className="form-info">Recuperamos os dados que você havia digitado antes da tela recarregar.</p>
+      )}
 
       <form className="form-card" onSubmit={handleSubmit}>
         {error && <p className="form-error">{error}</p>}
@@ -144,7 +157,14 @@ export default function ClientForm() {
           <button type="submit" className="btn-primary" disabled={saving}>
             {saving ? 'Salvando...' : 'Salvar'}
           </button>
-          <button type="button" className="btn-secondary" onClick={() => navigate('/admin/clientes')}>
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={() => {
+              clearDraft()
+              navigate('/admin/clientes')
+            }}
+          >
             Cancelar
           </button>
         </div>

@@ -13,6 +13,7 @@ import {
   RESPONSIBILITY_OPTIONS,
 } from '../../../types/database'
 import type { Client } from '../../../types/database'
+import { useDraftState } from '../../../hooks/useDraftState'
 
 type ProjectInputType = ProjectInput
 import '../../../components/common/admin-ui.css'
@@ -41,13 +42,15 @@ export default function ProjectForm() {
   const { id } = useParams()
   const isEdit = Boolean(id)
   const navigate = useNavigate()
+  const draftKey = isEdit ? `draft:project:edit:${id}` : 'draft:project:new'
 
   const [clients, setClients] = useState<Client[]>([])
-  const [form, setForm] = useState<ProjectInput>(emptyForm)
+  const [form, setForm, clearDraft] = useDraftState<ProjectInput>(draftKey, emptyForm)
   const [code, setCode] = useState<string | null>(null)
   const [loading, setLoading] = useState(isEdit)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [restoredDraft] = useState(() => Boolean(localStorage.getItem(draftKey)))
 
   useEffect(() => {
     listClients('').then(setClients).catch(() => undefined)
@@ -57,29 +60,32 @@ export default function ProjectForm() {
     if (!id) return
     getProject(id)
       .then((p) => {
-        setForm({
-          client_id: p.client_id,
-          name: p.name,
-          description: p.description,
-          context: p.context,
-          problem_identified: p.problem_identified,
-          objective: p.objective,
-          expected_result: p.expected_result,
-          scope_included: p.scope_included,
-          scope_excluded: p.scope_excluded,
-          assumptions: p.assumptions,
-          start_date: p.start_date,
-          expected_end_date: p.expected_end_date,
-          actual_end_date: p.actual_end_date,
-          status: p.status,
-          health: p.health,
-          priority: p.priority,
-          current_responsibility: p.current_responsibility,
-        })
         setCode(p.code)
+        if (!restoredDraft) {
+          setForm({
+            client_id: p.client_id,
+            name: p.name,
+            description: p.description,
+            context: p.context,
+            problem_identified: p.problem_identified,
+            objective: p.objective,
+            expected_result: p.expected_result,
+            scope_included: p.scope_included,
+            scope_excluded: p.scope_excluded,
+            assumptions: p.assumptions,
+            start_date: p.start_date,
+            expected_end_date: p.expected_end_date,
+            actual_end_date: p.actual_end_date,
+            status: p.status,
+            health: p.health,
+            priority: p.priority,
+            current_responsibility: p.current_responsibility,
+          })
+        }
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
 
   function update<K extends keyof ProjectInputType>(key: K, value: ProjectInputType[K]) {
@@ -93,9 +99,11 @@ export default function ProjectForm() {
     try {
       if (isEdit && id) {
         await updateProject(id, form)
+        clearDraft()
         navigate(`/admin/projetos/${id}`)
       } else {
         const created = await createProject(form)
+        clearDraft()
         navigate(`/admin/projetos/${created.id}`)
       }
     } catch (err) {
@@ -112,6 +120,10 @@ export default function ProjectForm() {
       <div className="page-header">
         <h1>{isEdit ? `Editar projeto ${code ?? ''}` : 'Novo projeto'}</h1>
       </div>
+
+      {restoredDraft && (
+        <p className="form-info">Recuperamos os dados que você havia digitado antes da tela recarregar.</p>
+      )}
 
       <form className="form-card" onSubmit={handleSubmit}>
         {error && <p className="form-error">{error}</p>}
@@ -255,7 +267,10 @@ export default function ProjectForm() {
           <button
             type="button"
             className="btn-secondary"
-            onClick={() => navigate(isEdit && id ? `/admin/projetos/${id}` : '/admin/projetos')}
+            onClick={() => {
+              clearDraft()
+              navigate(isEdit && id ? `/admin/projetos/${id}` : '/admin/projetos')
+            }}
           >
             Cancelar
           </button>
