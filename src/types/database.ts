@@ -192,6 +192,7 @@ export interface ScopeChange {
   id: string
   project_id: string
   description: string
+  requester: string | null
   request_date: string
   reason: string | null
   estimated_impact: string | null

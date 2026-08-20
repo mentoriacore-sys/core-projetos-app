@@ -4,10 +4,41 @@ import { getProject } from '../../../services/supabase/projects'
 import type { ProjectWithClient } from '../../../types/database'
 import StagesTab from './StagesTab'
 import TasksTab from './TasksTab'
+import DependenciesTab from './DependenciesTab'
+import DeliverablesTab from './DeliverablesTab'
+import ScopeChangesTab from './ScopeChangesTab'
+import DecisionsTab from './DecisionsTab'
+import RisksTab from './RisksTab'
+import DocumentsTab from './DocumentsTab'
+import HistoryTab from './HistoryTab'
+import { getErrorMessage } from '../../../lib/errorMessage'
 import '../../../components/common/admin-ui.css'
 import './ProjectDetail.css'
 
-type Tab = 'geral' | 'etapas' | 'tarefas'
+type Tab =
+  | 'geral'
+  | 'etapas'
+  | 'tarefas'
+  | 'entregaveis'
+  | 'dependencias'
+  | 'documentos'
+  | 'decisoes'
+  | 'riscos'
+  | 'escopo'
+  | 'historico'
+
+const TABS: { key: Tab; label: string }[] = [
+  { key: 'geral', label: 'Visão Geral' },
+  { key: 'etapas', label: 'Etapas' },
+  { key: 'tarefas', label: 'Tarefas' },
+  { key: 'entregaveis', label: 'Entregáveis' },
+  { key: 'dependencias', label: 'Dependências' },
+  { key: 'documentos', label: 'Documentos' },
+  { key: 'decisoes', label: 'Decisões' },
+  { key: 'riscos', label: 'Riscos' },
+  { key: 'escopo', label: 'Alteração de Escopo' },
+  { key: 'historico', label: 'Histórico' },
+]
 
 export default function ProjectDetail() {
   const { id } = useParams()
@@ -22,7 +53,7 @@ export default function ProjectDetail() {
     setLoading(true)
     getProject(id)
       .then(setProject)
-      .catch((err) => setError(err.message))
+      .catch((err) => setError(getErrorMessage(err)))
       .finally(() => setLoading(false))
   }, [id, reloadKey])
 
@@ -83,15 +114,11 @@ export default function ProjectDetail() {
       </div>
 
       <div className="tabs-bar">
-        <button className={tab === 'geral' ? 'active' : ''} onClick={() => setTab('geral')}>
-          Visão Geral
-        </button>
-        <button className={tab === 'etapas' ? 'active' : ''} onClick={() => setTab('etapas')}>
-          Etapas
-        </button>
-        <button className={tab === 'tarefas' ? 'active' : ''} onClick={() => setTab('tarefas')}>
-          Tarefas
-        </button>
+        {TABS.map((t) => (
+          <button key={t.key} className={tab === t.key ? 'active' : ''} onClick={() => setTab(t.key)}>
+            {t.label}
+          </button>
+        ))}
       </div>
 
       {tab === 'geral' && (
@@ -117,13 +144,15 @@ export default function ProjectDetail() {
         </div>
       )}
 
-      {tab === 'etapas' && (
-        <StagesTab projectId={id} onProgressChange={refreshProject} />
-      )}
-
-      {tab === 'tarefas' && (
-        <TasksTab projectId={id} onProgressChange={refreshProject} />
-      )}
+      {tab === 'etapas' && <StagesTab projectId={id} onProgressChange={refreshProject} />}
+      {tab === 'tarefas' && <TasksTab projectId={id} onProgressChange={refreshProject} />}
+      {tab === 'entregaveis' && <DeliverablesTab projectId={id} />}
+      {tab === 'dependencias' && <DependenciesTab projectId={id} />}
+      {tab === 'documentos' && <DocumentsTab projectId={id} />}
+      {tab === 'decisoes' && <DecisionsTab projectId={id} />}
+      {tab === 'riscos' && <RisksTab projectId={id} />}
+      {tab === 'escopo' && <ScopeChangesTab projectId={id} />}
+      {tab === 'historico' && <HistoryTab projectId={id} />}
     </div>
   )
 }
