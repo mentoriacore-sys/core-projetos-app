@@ -42,6 +42,7 @@ export default function Login() {
   return (
     <main className="login-screen">
       <div className="login-card">
+        <div className="login-brand-mark">C</div>
         <h1>C.O.R.E. Projetos</h1>
         <p className="subtitle">{mode === 'login' ? 'Entrar' : 'Criar conta'}</p>
 
