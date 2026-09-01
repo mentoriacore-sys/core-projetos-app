@@ -78,7 +78,7 @@ export interface Project {
 }
 
 export interface ProjectWithClient extends Project {
-  clients: Pick<Client, 'id' | 'code' | 'name'> | null
+  clients: Pick<Client, 'id' | 'code' | 'name' | 'company'> | null
 }
 
 export const STAGE_STATUS_OPTIONS = [

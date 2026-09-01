@@ -14,6 +14,7 @@ import { getErrorMessage } from '../../../lib/errorMessage'
 
 interface Props {
   projectId: string
+  onChange?: () => void
 }
 
 function emptyForm(projectId: string): Partial<DeliverableInput> {
@@ -32,7 +33,7 @@ function emptyForm(projectId: string): Partial<DeliverableInput> {
   }
 }
 
-export default function DeliverablesTab({ projectId }: Props) {
+export default function DeliverablesTab({ projectId, onChange }: Props) {
   const [items, setItems] = useState<Deliverable[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -47,6 +48,7 @@ export default function DeliverablesTab({ projectId }: Props) {
     setLoading(true)
     try {
       setItems(await listDeliverables(projectId))
+      onChange?.()
     } catch (err) {
       setError(getErrorMessage(err, 'Erro ao carregar entregáveis'))
     } finally {

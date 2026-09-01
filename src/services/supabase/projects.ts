@@ -12,7 +12,7 @@ interface ListFilters {
 export async function listProjects(filters: ListFilters) {
   let query = supabase
     .from('projects')
-    .select('*, clients ( id, code, name )')
+    .select('*, clients ( id, code, name, company )')
     .order('created_at', { ascending: false })
 
   if (filters.search.trim()) {
@@ -33,7 +33,7 @@ export async function listProjects(filters: ListFilters) {
 export async function getProject(id: string) {
   const { data, error } = await supabase
     .from('projects')
-    .select('*, clients ( id, code, name )')
+    .select('*, clients ( id, code, name, company )')
     .eq('id', id)
     .single()
   if (error) throw error

@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { getProject } from '../../../services/supabase/projects'
-import type { ProjectWithClient } from '../../../types/database'
+import { listStages } from '../../../services/supabase/stages'
+import { listTasksByProject } from '../../../services/supabase/tasks'
+import { listDeliverables } from '../../../services/supabase/deliverables'
+import type { Deliverable, ProjectStage, ProjectWithClient, Task } from '../../../types/database'
+import { StatusBadge } from '../../../components/common/Badge'
+import ProjectSummaryCard from './ProjectSummaryCard'
 import StagesTab from './StagesTab'
 import TasksTab from './TasksTab'
 import DependenciesTab from './DependenciesTab'
@@ -42,17 +47,27 @@ const TABS: { key: Tab; label: string }[] = [
 
 export default function ProjectDetail() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [project, setProject] = useState<ProjectWithClient | null>(null)
+  const [stages, setStages] = useState<ProjectStage[]>([])
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [deliverables, setDeliverables] = useState<Deliverable[]>([])
   const [tab, setTab] = useState<Tab>('geral')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     if (!id) return
     setLoading(true)
-    getProject(id)
-      .then(setProject)
+    Promise.all([getProject(id), listStages(id), listTasksByProject(id), listDeliverables(id)])
+      .then(([p, s, t, d]) => {
+        setProject(p)
+        setStages(s)
+        setTasks(t)
+        setDeliverables(d)
+      })
       .catch((err) => setError(getErrorMessage(err)))
       .finally(() => setLoading(false))
   }, [id, reloadKey])
@@ -67,51 +82,43 @@ export default function ProjectDetail() {
 
   return (
     <div>
-      <div className="page-header">
-        <div>
+      <div className="project-header">
+        <div className="project-header-main">
           <div className="project-breadcrumb">
             <Link to="/admin/projetos">Projetos</Link> / {project.code}
           </div>
-          <h1>{project.name}</h1>
+          <div className="project-title-row">
+            <h1>{project.name}</h1>
+            <StatusBadge status={project.status} />
+          </div>
+          <div className="project-client-line">
+            Cliente: <strong>{project.clients?.name ?? '—'}</strong>
+            {project.clients?.company && (
+              <>
+                {' '}
+                &nbsp;·&nbsp; Empresa: <strong>{project.clients.company}</strong>
+              </>
+            )}
+          </div>
         </div>
-        <Link to={`/admin/projetos/${id}/editar`} className="btn-secondary">
-          Editar dados do projeto
-        </Link>
+        <div className="project-header-actions">
+          <button className="btn-secondary" onClick={() => navigate('/admin/projetos')}>
+            ← Voltar para projetos
+          </button>
+          <div className="project-menu-wrap">
+            <button className="btn-secondary project-menu-btn" onClick={() => setMenuOpen((o) => !o)}>
+              ⋮
+            </button>
+            {menuOpen && (
+              <div className="project-menu-dropdown" onMouseLeave={() => setMenuOpen(false)}>
+                <Link to={`/admin/projetos/${id}/editar`}>Editar dados do projeto</Link>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
-      <div className="project-summary">
-        <div>
-          <span className="summary-label">Cliente</span>
-          <span>{project.clients?.name ?? '—'}</span>
-        </div>
-        <div>
-          <span className="summary-label">Status</span>
-          <span className="status-badge">{project.status}</span>
-        </div>
-        <div>
-          <span className="summary-label">Saúde</span>
-          <span>{project.health ?? '—'}</span>
-        </div>
-        <div>
-          <span className="summary-label">Responsabilidade atual</span>
-          <span>{project.current_responsibility ?? '—'}</span>
-        </div>
-        <div>
-          <span className="summary-label">Início</span>
-          <span>{project.start_date ?? '—'}</span>
-        </div>
-        <div>
-          <span className="summary-label">Previsão de conclusão</span>
-          <span>{project.expected_end_date ?? '—'}</span>
-        </div>
-        <div className="progress-cell">
-          <span className="summary-label">Progresso</span>
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${project.progress}%` }} />
-          </div>
-          <span>{Number(project.progress).toFixed(0)}%</span>
-        </div>
-      </div>
+      <ProjectSummaryCard project={project} stages={stages} tasks={tasks} deliverables={deliverables} />
 
       <div className="tabs-bar">
         {TABS.map((t) => (
@@ -146,7 +153,7 @@ export default function ProjectDetail() {
 
       {tab === 'etapas' && <StagesTab projectId={id} onProgressChange={refreshProject} />}
       {tab === 'tarefas' && <TasksTab projectId={id} onProgressChange={refreshProject} />}
-      {tab === 'entregaveis' && <DeliverablesTab projectId={id} />}
+      {tab === 'entregaveis' && <DeliverablesTab projectId={id} onChange={refreshProject} />}
       {tab === 'dependencias' && <DependenciesTab projectId={id} />}
       {tab === 'documentos' && <DocumentsTab projectId={id} />}
       {tab === 'decisoes' && <DecisionsTab projectId={id} />}
