@@ -37,3 +37,30 @@
   background: var(--color-neutral-bg);
   color: var(--color-neutral);
 }
+
+.due-plain {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.due-badge {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.due-info {
+  color: var(--color-primary);
+}
+.due-neutral {
+  color: var(--color-text-secondary);
+}
+.due-warning {
+  color: var(--color-warning);
+}
+.due-orange {
+  color: var(--color-orange);
+}
+.due-danger {
+  color: var(--color-danger);
+}

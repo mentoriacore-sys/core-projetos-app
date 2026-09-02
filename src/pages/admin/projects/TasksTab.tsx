@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import { listStages } from '../../../services/supabase/stages'
-import { createTask, deleteTask, listTasksByProject, updateTask, type TaskInput } from '../../../services/supabase/tasks'
+import { countAttachmentsByTask, createTask, deleteTask, listTasksByProject, updateTask, type TaskInput } from '../../../services/supabase/tasks'
+import { listProfiles } from '../../../services/supabase/profiles'
 import { STAGE_STATUS_OPTIONS, VISIBILITY_OPTIONS, RESPONSIBILITY_OPTIONS } from '../../../types/database'
 import type { ProjectStage, Task } from '../../../types/database'
 import { getErrorMessage } from '../../../lib/errorMessage'
+import { ResponsibleBadge, DueDateBadge } from '../../../components/common/Badge'
+import TaskDetailDrawer from './TaskDetailDrawer'
 
 interface Props {
   projectId: string
@@ -25,34 +28,32 @@ function emptyForm(projectId: string, stageId: string): TaskInput {
   }
 }
 
-function isLate(task: Task) {
-  if (!task.completed_at || !task.expected_date) return false
-  return task.completed_at.slice(0, 10) > task.expected_date
-}
-
-function isEarlyOrOnTime(task: Task) {
-  if (!task.completed_at || !task.expected_date) return false
-  return task.completed_at.slice(0, 10) <= task.expected_date
-}
-
 export default function TasksTab({ projectId, onProgressChange }: Props) {
   const [tasks, setTasks] = useState<Task[]>([])
   const [stages, setStages] = useState<ProjectStage[]>([])
+  const [profileNames, setProfileNames] = useState<Record<string, string>>({})
+  const [attachmentCounts, setAttachmentCounts] = useState<Record<string, number>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [form, setForm] = useState<TaskInput | null>(null)
+  const [openTaskId, setOpenTaskId] = useState<string | null>(null)
 
-  async function reload() {
-    setLoading(true)
+  async function reload(showSpinner = true) {
+    if (showSpinner) setLoading(true)
     try {
-      const [t, s] = await Promise.all([listTasksByProject(projectId), listStages(projectId)])
+      const [t, s, profiles] = await Promise.all([listTasksByProject(projectId), listStages(projectId), listProfiles()])
       setTasks(t)
       setStages(s)
+      const names: Record<string, string> = {}
+      profiles.forEach((p) => (names[p.id] = p.name || p.email || 'Usuário'))
+      setProfileNames(names)
+      setAttachmentCounts(await countAttachmentsByTask(t.map((task) => task.id)))
+      onProgressChange()
     } catch (err) {
       setError(getErrorMessage(err, 'Erro ao carregar tarefas'))
     } finally {
-      setLoading(false)
+      if (showSpinner) setLoading(false)
     }
   }
 
@@ -82,7 +83,6 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
       setShowForm(false)
       setForm(null)
       await reload()
-      onProgressChange()
     } catch (err) {
       setError(getErrorMessage(err, 'Erro ao salvar tarefa'))
     }
@@ -94,15 +94,15 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
       completed_at: status === 'Concluída' ? new Date().toISOString() : null,
     })
     await reload()
-    onProgressChange()
   }
 
   async function handleDelete(task: Task) {
     if (!confirm(`Excluir a tarefa "${task.title}"?`)) return
     await deleteTask(task.id)
     await reload()
-    onProgressChange()
   }
+
+  const openTask = tasks.find((t) => t.id === openTaskId) ?? null
 
   return (
     <div>
@@ -194,7 +194,7 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
       ) : tasks.length === 0 ? (
         <div className="empty-state">Nenhuma tarefa cadastrada ainda.</div>
       ) : (
-        <table className="data-table">
+        <table className="data-table task-table">
           <thead>
             <tr>
               <th>Tarefa</th>
@@ -202,18 +202,34 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
               <th>Responsável</th>
               <th>Prazo</th>
               <th>Status</th>
-              <th>Concluído em</th>
+              <th>Conclusão</th>
+              <th>Última atualização</th>
+              <th>Anexos</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {tasks.map((task) => (
-              <tr key={task.id}>
-                <td>{task.title}</td>
-                <td>{stageName(task.stage_id)}</td>
-                <td>{task.responsible ?? '—'}</td>
-                <td>{task.expected_date || '—'}</td>
+              <tr
+                key={task.id}
+                className={task.is_blocking ? 'row-blocking' : task.expected_date && task.status !== 'Concluída' && task.expected_date < new Date().toISOString().slice(0, 10) ? 'row-overdue' : ''}
+                onClick={() => setOpenTaskId(task.id)}
+              >
                 <td>
+                  <div className="task-title-cell">
+                    {task.is_blocking && <span title="Bloqueadora">🔒</span>}
+                    <strong>{task.title}</strong>
+                  </div>
+                  {task.description && <div className="task-subtitle">{task.description}</div>}
+                </td>
+                <td>{stageName(task.stage_id)}</td>
+                <td>
+                  <ResponsibleBadge responsible={task.responsible} />
+                </td>
+                <td>
+                  <DueDateBadge expectedDate={task.expected_date} status={task.status} />
+                </td>
+                <td onClick={(e) => e.stopPropagation()}>
                   <select value={task.status} onChange={(e) => handleStatusChange(task, e.target.value as Task['status'])}>
                     {STAGE_STATUS_OPTIONS.map((s) => (
                       <option key={s} value={s}>
@@ -222,17 +238,13 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
                     ))}
                   </select>
                 </td>
-                <td>
-                  {task.completed_at ? (
-                    <span style={{ color: isLate(task) ? '#b91c1c' : isEarlyOrOnTime(task) ? '#166534' : undefined }}>
-                      {task.completed_at.slice(0, 10)}
-                      {isLate(task) && ' (atrasado)'}
-                    </span>
-                  ) : (
-                    '—'
-                  )}
+                <td>{task.completed_at ? task.completed_at.slice(0, 10) : '—'}</td>
+                <td className="task-updated-cell">
+                  {task.updated_at.slice(0, 10)}
+                  <span>por {profileNames[task.updated_by ?? ''] ?? '—'}</span>
                 </td>
-                <td>
+                <td>{attachmentCounts[task.id] ? `📎 ${attachmentCounts[task.id]}` : '—'}</td>
+                <td onClick={(e) => e.stopPropagation()}>
                   <div className="row-actions">
                     <button className="danger" onClick={() => handleDelete(task)} type="button">
                       Excluir
@@ -243,6 +255,15 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
             ))}
           </tbody>
         </table>
+      )}
+
+      {openTask && (
+        <TaskDetailDrawer
+          task={openTask}
+          profileNames={profileNames}
+          onClose={() => setOpenTaskId(null)}
+          onChange={() => reload(false)}
+        />
       )}
     </div>
   )

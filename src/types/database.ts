@@ -115,6 +115,8 @@ export interface ProjectStage {
   updated_at: string
 }
 
+export const SCHEDULE_IMPACT_OPTIONS = ['Não avaliado', 'Sem impacto', 'Impacto confirmado'] as const
+
 export interface Task {
   id: string
   stage_id: string
@@ -126,10 +128,34 @@ export interface Task {
   status: (typeof STAGE_STATUS_OPTIONS)[number]
   expected_date: string | null
   completed_at: string | null
+  is_blocking: boolean
+  schedule_impact_status: (typeof SCHEDULE_IMPACT_OPTIONS)[number]
+  schedule_impact_note: string | null
+  updated_by: string | null
   visibility: 'internal' | 'client' | 'both'
   notes: string | null
   created_at: string
   updated_at: string
+}
+
+export interface TaskComment {
+  id: string
+  task_id: string
+  author_id: string | null
+  message: string
+  visibility: 'internal' | 'client' | 'both'
+  created_at: string
+}
+
+export interface TaskAttachment {
+  id: string
+  task_id: string
+  uploaded_by: string | null
+  storage_path: string
+  file_name: string
+  mime_type: string
+  file_size: number
+  created_at: string
 }
 
 export const DEPENDENCY_STATUS_OPTIONS = ['Aberta', 'Aguardando', 'Bloqueadora', 'Resolvida'] as const

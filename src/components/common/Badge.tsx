@@ -1,3 +1,4 @@
+import { dueDateInfo } from '../../lib/dueDate'
 import './Badge.css'
 
 type Tone = 'success' | 'info' | 'warning' | 'orange' | 'danger' | 'neutral'
@@ -46,4 +47,14 @@ export function ResponsibleBadge({ responsible }: { responsible: string | null |
 export function ImpactBadge({ impact }: { impact: 'No prazo' | 'Atenção necessária' | 'Cronograma impactado' }) {
   const tone: Tone = impact === 'No prazo' ? 'success' : impact === 'Atenção necessária' ? 'warning' : 'danger'
   return <span className={`badge badge-${tone}`}>{impact}</span>
+}
+
+export function DueDateBadge({ expectedDate, status }: { expectedDate: string | null; status: string }) {
+  const info = dueDateInfo(expectedDate, status)
+  if (!info) return <span className="due-plain">{expectedDate ?? '—'}</span>
+  return (
+    <span className={`due-badge due-${info.tone}`}>
+      {expectedDate} · {info.label}
+    </span>
+  )
 }

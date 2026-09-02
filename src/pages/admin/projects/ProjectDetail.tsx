@@ -60,7 +60,10 @@ export default function ProjectDetail() {
 
   useEffect(() => {
     if (!id) return
-    setLoading(true)
+    // Só mostra a tela cheia de "Carregando..." na primeira vez — atualizações
+    // seguintes (reloadKey) acontecem em segundo plano, sem desmontar as abas
+    // (evita loop: uma aba desmontada remonta e dispara nova atualização).
+    setLoading((prev) => (project ? prev : true))
     Promise.all([getProject(id), listStages(id), listTasksByProject(id), listDeliverables(id)])
       .then(([p, s, t, d]) => {
         setProject(p)
@@ -70,6 +73,7 @@ export default function ProjectDetail() {
       })
       .catch((err) => setError(getErrorMessage(err)))
       .finally(() => setLoading(false))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, reloadKey])
 
   function refreshProject() {

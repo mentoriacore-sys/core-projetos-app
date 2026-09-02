@@ -211,3 +211,45 @@
   color: var(--color-danger);
   border-color: #f3c7c7;
 }
+
+.task-table tbody tr {
+  cursor: pointer;
+}
+
+.task-table tr.row-overdue td:first-child {
+  box-shadow: inset 3px 0 0 var(--color-danger);
+}
+
+.task-table tr.row-blocking td:first-child {
+  box-shadow: inset 3px 0 0 var(--color-orange);
+}
+
+.task-title-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.task-subtitle {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin-top: 0.15rem;
+}
+
+.task-updated-cell {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--text-sm);
+}
+
+.task-updated-cell span {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.task-table select {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+}

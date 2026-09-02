@@ -1,0 +1,167 @@
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 31, 56, 0.35);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 50;
+}
+
+.drawer-panel {
+  width: 440px;
+  max-width: 100%;
+  height: 100%;
+  background: var(--color-card);
+  padding: var(--space-5) var(--space-5) var(--space-6);
+  overflow-y: auto;
+  box-shadow: var(--shadow-hover);
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.drawer-header h2 {
+  font-size: var(--text-lg);
+  margin-bottom: 0.4rem;
+}
+
+.drawer-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.drawer-description {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.drawer-blocking-note {
+  background: var(--color-orange-bg);
+  color: var(--color-orange);
+  font-size: var(--text-sm);
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-4);
+}
+
+.drawer-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.drawer-quick-actions button {
+  font-size: var(--text-sm);
+}
+
+.drawer-section {
+  margin-bottom: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.drawer-section-label {
+  display: block;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.drawer-section-hint {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-2);
+}
+
+.drawer-section select {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+
+.drawer-attachments {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.drawer-attachments li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-sm);
+}
+
+.drawer-attachment-link {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.drawer-attachment-remove {
+  background: none;
+  border: none;
+  color: var(--color-danger);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+
+.drawer-comments {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.drawer-comment p {
+  font-size: var(--text-sm);
+  margin: 0.15rem 0 0;
+}
+
+.drawer-comment-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.drawer-comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.drawer-comment-form textarea {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  resize: vertical;
+}
+
+.drawer-comment-form button {
+  align-self: flex-end;
+}
