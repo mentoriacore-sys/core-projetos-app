@@ -3,6 +3,8 @@ import { createStage, deleteStage, listStages, updateStage, type StageInput } fr
 import { STAGE_STATUS_OPTIONS, VISIBILITY_OPTIONS } from '../../../types/database'
 import type { ProjectStage } from '../../../types/database'
 import { getErrorMessage } from '../../../lib/errorMessage'
+import ProgressBar from '../../../components/common/ProgressBar'
+import { DueDateBadge } from '../../../components/common/Badge'
 
 interface Props {
   projectId: string
@@ -101,6 +103,8 @@ export default function StagesTab({ projectId, onProgressChange }: Props) {
     onProgressChange()
   }
 
+  const activeCount = stages.filter((s) => s.status !== 'Cancelada').length
+
   return (
     <div>
       {error && <p className="form-error">{error}</p>}
@@ -164,7 +168,7 @@ export default function StagesTab({ projectId, onProgressChange }: Props) {
             </label>
           </div>
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            <span style={{ fontSize: '0.82rem', color: '#374151' }}>Objetivo</span>
+            <span style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Objetivo</span>
             <textarea
               rows={2}
               style={{ width: '100%', marginTop: '0.3rem' }}
@@ -188,10 +192,15 @@ export default function StagesTab({ projectId, onProgressChange }: Props) {
       ) : stages.length === 0 ? (
         <div className="empty-state">Nenhuma etapa cadastrada ainda.</div>
       ) : (
-        stages.map((stage) => (
+        stages.map((stage, index) => (
           <div className="stage-card" key={stage.id}>
             <div className="stage-card-header">
-              <h3>{stage.name}</h3>
+              <div>
+                <span className="stage-index">
+                  Etapa {index + 1} de {activeCount || stages.length}
+                </span>
+                <h3>{stage.name}</h3>
+              </div>
               <div className="row-actions">
                 <button onClick={() => startEdit(stage)}>Editar</button>
                 <button className="danger" onClick={() => handleDelete(stage)}>
@@ -199,6 +208,12 @@ export default function StagesTab({ projectId, onProgressChange }: Props) {
                 </button>
               </div>
             </div>
+
+            <div className="stage-progress-row">
+              <ProgressBar value={Number(stage.progress)} />
+              <span className="stage-progress-pct">{Number(stage.progress).toFixed(0)}% concluído</span>
+            </div>
+
             <div className="stage-meta">
               <select value={stage.status} onChange={(e) => handleStatusChange(stage, e.target.value as ProjectStage['status'])}>
                 {STAGE_STATUS_OPTIONS.map((s) => (
@@ -207,8 +222,7 @@ export default function StagesTab({ projectId, onProgressChange }: Props) {
                   </option>
                 ))}
               </select>
-              <span>Progresso: {Number(stage.progress).toFixed(0)}%</span>
-              {stage.expected_end && <span>Prazo: {stage.expected_end}</span>}
+              {stage.expected_end && <DueDateBadge expectedDate={stage.expected_end} status={stage.status} />}
             </div>
           </div>
         ))

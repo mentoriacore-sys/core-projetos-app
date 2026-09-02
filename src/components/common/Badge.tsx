@@ -30,6 +30,16 @@ const STATUS_TONE: Record<string, Tone> = {
   'Cancelada': 'neutral',
   'Cancelado': 'neutral',
   'Planejamento': 'neutral',
+  'Baixa': 'success',
+  'Baixo': 'success',
+  'Média': 'warning',
+  'Médio': 'warning',
+  'Alta': 'danger',
+  'Alto': 'danger',
+  'Bloqueia minha operação': 'danger',
+  'Encerrado': 'neutral',
+  'Aberto': 'info',
+  'Resolvida': 'success',
 }
 
 export function StatusBadge({ status }: { status: string | null | undefined }) {

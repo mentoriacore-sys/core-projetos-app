@@ -11,6 +11,7 @@ import {
 import { DELIVERABLE_STATUS_OPTIONS, VISIBILITY_OPTIONS } from '../../../types/database'
 import type { Approval, Deliverable } from '../../../types/database'
 import { getErrorMessage } from '../../../lib/errorMessage'
+import { DueDateBadge } from '../../../components/common/Badge'
 
 interface Props {
   projectId: string
@@ -182,7 +183,7 @@ export default function DeliverablesTab({ projectId, onChange }: Props) {
             </label>
           </div>
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            <span style={{ fontSize: '0.82rem', color: '#374151' }}>Descrição</span>
+            <span style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Descrição</span>
             <textarea
               rows={2}
               style={{ width: '100%', marginTop: '0.3rem' }}
@@ -210,7 +211,7 @@ export default function DeliverablesTab({ projectId, onChange }: Props) {
           <div className="stage-card" key={item.id}>
             <div className="stage-card-header">
               <h3>
-                {item.name} <span style={{ fontWeight: 400, color: '#9ca3af' }}>{item.version}</span>
+                {item.name} <span style={{ fontWeight: 400, color: 'var(--color-text-secondary)' }}>{item.version}</span>
               </h3>
               <div className="row-actions">
                 <button onClick={() => toggleExpand(item)}>{expandedId === item.id ? 'Ocultar' : 'Aprovações'}</button>
@@ -227,7 +228,7 @@ export default function DeliverablesTab({ projectId, onChange }: Props) {
                   </option>
                 ))}
               </select>
-              {item.due_date && <span>Prazo: {item.due_date}</span>}
+              {item.due_date && <DueDateBadge expectedDate={item.due_date} status={item.status === 'Entregue' ? 'Concluída' : item.status} />}
               {item.link_or_file && (
                 <a href={item.link_or_file} target="_blank" rel="noreferrer">
                   Abrir link
@@ -236,14 +237,14 @@ export default function DeliverablesTab({ projectId, onChange }: Props) {
             </div>
 
             {expandedId === item.id && (
-              <div style={{ marginTop: '0.75rem', borderTop: '1px solid #f0f1f3', paddingTop: '0.75rem' }}>
+              <div style={{ marginTop: '0.75rem', borderTop: '1px solid var(--color-border)', paddingTop: '0.75rem' }}>
                 {(approvalsByDeliverable[item.id] ?? []).length === 0 ? (
-                  <p style={{ fontSize: '0.85rem', color: '#9ca3af' }}>Nenhuma decisão registrada ainda.</p>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>Nenhuma decisão registrada ainda.</p>
                 ) : (
                   (approvalsByDeliverable[item.id] ?? []).map((a) => (
                     <div key={a.id} style={{ fontSize: '0.85rem', marginBottom: '0.4rem' }}>
                       <strong>{a.decision}</strong> — {new Date(a.decided_at).toLocaleString('pt-BR')}
-                      {a.comment && <div style={{ color: '#6b7280' }}>{a.comment}</div>}
+                      {a.comment && <div style={{ color: 'var(--color-text-secondary)' }}>{a.comment}</div>}
                     </div>
                   ))
                 )}
@@ -260,7 +261,7 @@ export default function DeliverablesTab({ projectId, onChange }: Props) {
                 {adjustCommentFor === item.id && (
                   <div className="inline-form" style={{ marginTop: '0.5rem' }}>
                     <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-                      <span style={{ fontSize: '0.82rem', color: '#374151' }}>Comentário do ajuste (obrigatório)</span>
+                      <span style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Comentário do ajuste (obrigatório)</span>
                       <textarea
                         rows={2}
                         style={{ width: '100%', marginTop: '0.3rem' }}

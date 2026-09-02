@@ -1,0 +1,14 @@
+.progress-bar-track {
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+  height: 7px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.progress-bar-fill {
+  background: var(--color-primary);
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.3s ease;
+}

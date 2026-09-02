@@ -82,7 +82,7 @@ export default function DecisionsTab({ projectId }: Props) {
             </label>
           </div>
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            <span style={{ fontSize: '0.82rem', color: '#374151' }}>Contexto</span>
+            <span style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Contexto</span>
             <textarea
               rows={2}
               style={{ width: '100%', marginTop: '0.3rem' }}
@@ -112,8 +112,8 @@ export default function DecisionsTab({ projectId }: Props) {
               <h3>{item.decision}</h3>
               <span className="summary-label">{item.decision_date}</span>
             </div>
-            {item.context && <p style={{ fontSize: '0.85rem', color: '#374151', margin: '0.5rem 0 0' }}>{item.context}</p>}
-            {item.impact && <p style={{ fontSize: '0.85rem', color: '#6b7280', margin: '0.25rem 0 0' }}>Impacto: {item.impact}</p>}
+            {item.context && <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', margin: '0.5rem 0 0' }}>{item.context}</p>}
+            {item.impact && <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', margin: '0.25rem 0 0' }}>Impacto: {item.impact}</p>}
           </div>
         ))
       )}

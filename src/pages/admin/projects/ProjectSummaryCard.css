@@ -67,7 +67,7 @@
   background: var(--color-primary);
 }
 .dot-warning {
-  background: #d9a441;
+  background: var(--color-warning);
 }
 .dot-danger {
   background: var(--color-danger);

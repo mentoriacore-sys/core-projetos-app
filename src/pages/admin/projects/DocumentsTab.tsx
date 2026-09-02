@@ -208,7 +208,7 @@ export default function DocumentsTab({ projectId }: Props) {
               <input value={linkForm.url ?? ''} onChange={(e) => setLinkForm({ ...linkForm, url: e.target.value })} />
             </label>
           </div>
-          <p style={{ fontSize: '0.78rem', color: '#9ca3af', margin: '0 0 0.5rem' }}>
+          <p style={{ fontSize: '0.78rem', color: 'var(--color-text-secondary)', margin: '0 0 0.5rem' }}>
             Nunca coloque senha, token ou credencial aqui — só o link de acesso.
           </p>
           <div className="row-actions">

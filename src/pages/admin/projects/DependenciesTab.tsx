@@ -9,6 +9,7 @@ import {
 import { DEPENDENCY_STATUS_OPTIONS } from '../../../types/database'
 import type { Dependency } from '../../../types/database'
 import { getErrorMessage } from '../../../lib/errorMessage'
+import { DueDateBadge } from '../../../components/common/Badge'
 
 interface Props {
   projectId: string
@@ -166,14 +167,16 @@ export default function DependenciesTab({ projectId }: Props) {
                 ))}
               </select>
               {dep.responsible && <span>Aguardando: {dep.responsible}</span>}
-              {dep.expected_date && <span>Prazo: {dep.expected_date}</span>}
+              {dep.expected_date && (
+                <DueDateBadge expectedDate={dep.expected_date} status={dep.status === 'Resolvida' ? 'Concluída' : dep.status} />
+              )}
               {dep.resolution && <span>Resolução: {dep.resolution}</span>}
             </div>
 
             {resolvingId === dep.id && (
               <div className="inline-form" style={{ marginTop: '0.75rem' }}>
                 <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-                  <span style={{ fontSize: '0.82rem', color: '#374151' }}>Como foi resolvida?</span>
+                  <span style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Como foi resolvida?</span>
                   <textarea
                     rows={2}
                     style={{ width: '100%', marginTop: '0.3rem' }}

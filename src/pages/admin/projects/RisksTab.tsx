@@ -3,6 +3,7 @@ import { createRisk, listRisks, updateRisk, type RiskInput } from '../../../serv
 import { RISK_PROBABILITY_OPTIONS, RISK_IMPACT_OPTIONS } from '../../../types/database'
 import type { ProjectRisk } from '../../../types/database'
 import { getErrorMessage } from '../../../lib/errorMessage'
+import { StatusBadge } from '../../../components/common/Badge'
 
 interface Props {
   projectId: string
@@ -98,7 +99,7 @@ export default function RisksTab({ projectId }: Props) {
             </label>
           </div>
           <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            <span style={{ fontSize: '0.82rem', color: '#374151' }}>Mitigação</span>
+            <span style={{ fontSize: '0.82rem', color: 'var(--color-text-secondary)' }}>Mitigação</span>
             <textarea
               rows={2}
               style={{ width: '100%', marginTop: '0.3rem' }}
@@ -133,11 +134,15 @@ export default function RisksTab({ projectId }: Props) {
               </div>
             </div>
             <div className="stage-meta">
-              <span>Probabilidade: {item.probability ?? '—'}</span>
-              <span>Impacto: {item.impact ?? '—'}</span>
-              <span>{item.status ?? 'Aberto'}</span>
+              <span>
+                Probabilidade: <StatusBadge status={item.probability} />
+              </span>
+              <span>
+                Impacto: <StatusBadge status={item.impact} />
+              </span>
+              <StatusBadge status={item.status ?? 'Aberto'} />
             </div>
-            {item.mitigation && <p style={{ fontSize: '0.85rem', color: '#374151', margin: '0.5rem 0 0' }}>Mitigação: {item.mitigation}</p>}
+            {item.mitigation && <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', margin: '0.5rem 0 0' }}>Mitigação: {item.mitigation}</p>}
           </div>
         ))
       )}
