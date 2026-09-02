@@ -7,7 +7,7 @@ Aplicação **independente** da Base C.O.R.E. — código, repositório, deploy 
 Especificação completa: [`docs/CORE_PROJETOS_SPEC_V1.md`](docs/CORE_PROJETOS_SPEC_V1.md)
 Instruções permanentes de desenvolvimento: [`CLAUDE.md`](CLAUDE.md)
 
-Status: Fase 0 a 5 concluídas (produto completo). Redesign visual em andamento — Fases A a D concluídas (design system, cabeçalho + resumo executivo do projeto, modelo de tarefa expandido com bloqueio/impacto/comentários/anexos, nova tabela de tarefas com badges semânticos e painel de detalhes). Faltam: Etapas/demais abas redesenhadas, mobile, Portal do Cliente, tela "Tarefas" geral.
+Status: Fase 0 a 5 concluídas (produto completo). Redesign visual em andamento — Fases A a E concluídas (design system, cabeçalho + resumo executivo, modelo de tarefa expandido com bloqueio/impacto/comentários/anexos, nova tabela de tarefas e painel de detalhes, Etapas e demais abas com badges semânticos). Faltam: mobile (Fase F), Portal do Cliente (Fase G), tela "Tarefas" geral + polimento final (Fase H).
 
 ## Rodando localmente
 
