@@ -200,3 +200,53 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Tabelas viram cards empilhados no celular — nenhuma informação fica
+   escondida, só reorganizada (redesign, seção 22). */
+@media (max-width: 720px) {
+  .page-header {
+    flex-wrap: wrap;
+  }
+
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table,
+  .data-table tbody,
+  .data-table tr,
+  .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .data-table tr {
+    border-bottom: 8px solid var(--color-bg);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 0.4rem 0;
+    border-bottom: none;
+    text-align: right;
+  }
+
+  .data-table td[data-label]::before {
+    content: attr(data-label);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
+    font-weight: 600;
+    text-align: left;
+    flex-shrink: 0;
+  }
+
+  .data-table td:not([data-label]) {
+    display: none;
+  }
+}

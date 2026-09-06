@@ -62,11 +62,11 @@ export default function ClientsList() {
           <tbody>
             {clients.map((c) => (
               <tr key={c.id} onClick={() => navigate(`/admin/clientes/${c.id}`)}>
-                <td>{c.code}</td>
-                <td>{c.name}</td>
-                <td>{c.company || '—'}</td>
-                <td>{c.email || '—'}</td>
-                <td>{c.phone || '—'}</td>
+                <td data-label="Código">{c.code}</td>
+                <td data-label="Nome">{c.name}</td>
+                <td data-label="Empresa">{c.company || '—'}</td>
+                <td data-label="E-mail">{c.email || '—'}</td>
+                <td data-label="Telefone">{c.phone || '—'}</td>
               </tr>
             ))}
           </tbody>

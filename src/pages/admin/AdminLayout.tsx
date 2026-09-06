@@ -97,6 +97,9 @@ export default function AdminLayout() {
 
       <div className="admin-main">
         <header className="admin-header">
+          <div className="admin-brand admin-brand-mobile">
+            <span className="admin-brand-mark">C</span>
+          </div>
           <div className="admin-header-spacer" />
           <button className="admin-icon-btn" title="Notificações">
             <Icon name="bell" size={18} />
@@ -110,6 +113,25 @@ export default function AdminLayout() {
           <Outlet />
         </main>
       </div>
+
+      <nav className="admin-mobile-nav">
+        <NavLink to="/admin" end className={({ isActive }) => (isActive ? 'active' : '')}>
+          <Icon name="dashboard" />
+          <span>Dashboard</span>
+        </NavLink>
+        <NavLink to="/admin/clientes" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <Icon name="clients" />
+          <span>Clientes</span>
+        </NavLink>
+        <NavLink to="/admin/projetos" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <Icon name="projects" />
+          <span>Projetos</span>
+        </NavLink>
+        <button className="admin-mobile-nav-more" onClick={signOut}>
+          <Icon name="logout" />
+          <span>Sair</span>
+        </button>
+      </nav>
     </div>
   )
 }

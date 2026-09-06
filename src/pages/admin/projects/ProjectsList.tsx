@@ -4,6 +4,7 @@ import { listProjects } from '../../../services/supabase/projects'
 import { listClients } from '../../../services/supabase/clients'
 import { PROJECT_STATUS_OPTIONS } from '../../../types/database'
 import type { Client, ProjectWithClient } from '../../../types/database'
+import { StatusBadge } from '../../../components/common/Badge'
 import '../../../components/common/admin-ui.css'
 
 export default function ProjectsList() {
@@ -88,14 +89,14 @@ export default function ProjectsList() {
           <tbody>
             {projects.map((p) => (
               <tr key={p.id} onClick={() => navigate(`/admin/projetos/${p.id}`)}>
-                <td>{p.code}</td>
-                <td>{p.name}</td>
-                <td>{p.clients?.name ?? '—'}</td>
-                <td>
-                  <span className="status-badge">{p.status}</span>
+                <td data-label="Código">{p.code}</td>
+                <td data-label="Projeto">{p.name}</td>
+                <td data-label="Cliente">{p.clients?.name ?? '—'}</td>
+                <td data-label="Status">
+                  <StatusBadge status={p.status} />
                 </td>
-                <td>{p.health ?? '—'}</td>
-                <td>{Number(p.progress).toFixed(0)}%</td>
+                <td data-label="Saúde">{p.health ? <StatusBadge status={p.health} /> : '—'}</td>
+                <td data-label="Progresso">{Number(p.progress).toFixed(0)}%</td>
               </tr>
             ))}
           </tbody>

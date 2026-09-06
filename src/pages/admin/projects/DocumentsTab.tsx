@@ -165,14 +165,14 @@ export default function DocumentsTab({ projectId }: Props) {
           <tbody>
             {files.map((f) => (
               <tr key={f.id}>
-                <td>
+                <td data-label="Nome">
                   <a href={f.file_or_url} target="_blank" rel="noreferrer">
                     {f.name}
                   </a>
                 </td>
-                <td>{f.category ?? '—'}</td>
-                <td>{f.file_date}</td>
-                <td>
+                <td data-label="Categoria">{f.category ?? '—'}</td>
+                <td data-label="Data">{f.file_date}</td>
+                <td data-label="Ações">
                   <div className="row-actions">
                     <button className="danger" onClick={() => handleDeleteFile(f)} type="button">
                       Excluir
@@ -236,13 +236,13 @@ export default function DocumentsTab({ projectId }: Props) {
           <tbody>
             {links.map((l) => (
               <tr key={l.id}>
-                <td>
+                <td data-label="Ferramenta">
                   <a href={l.url} target="_blank" rel="noreferrer">
                     {l.tool}
                   </a>
                 </td>
-                <td>{l.purpose ?? '—'}</td>
-                <td>
+                <td data-label="Finalidade">{l.purpose ?? '—'}</td>
+                <td data-label="Ações">
                   <div className="row-actions">
                     <button className="danger" onClick={() => handleDeleteLink(l)} type="button">
                       Excluir

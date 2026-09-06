@@ -215,21 +215,21 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
                 className={task.is_blocking ? 'row-blocking' : task.expected_date && task.status !== 'Concluída' && task.expected_date < new Date().toISOString().slice(0, 10) ? 'row-overdue' : ''}
                 onClick={() => setOpenTaskId(task.id)}
               >
-                <td>
+                <td data-label="Tarefa">
                   <div className="task-title-cell">
                     {task.is_blocking && <span title="Bloqueadora">🔒</span>}
                     <strong>{task.title}</strong>
                   </div>
                   {task.description && <div className="task-subtitle">{task.description}</div>}
                 </td>
-                <td>{stageName(task.stage_id)}</td>
-                <td>
+                <td data-label="Etapa">{stageName(task.stage_id)}</td>
+                <td data-label="Responsável">
                   <ResponsibleBadge responsible={task.responsible} />
                 </td>
-                <td>
+                <td data-label="Prazo">
                   <DueDateBadge expectedDate={task.expected_date} status={task.status} />
                 </td>
-                <td onClick={(e) => e.stopPropagation()}>
+                <td data-label="Status" onClick={(e) => e.stopPropagation()}>
                   <select value={task.status} onChange={(e) => handleStatusChange(task, e.target.value as Task['status'])}>
                     {STAGE_STATUS_OPTIONS.map((s) => (
                       <option key={s} value={s}>
@@ -238,13 +238,13 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
                     ))}
                   </select>
                 </td>
-                <td>{task.completed_at ? task.completed_at.slice(0, 10) : '—'}</td>
-                <td className="task-updated-cell">
+                <td data-label="Conclusão">{task.completed_at ? task.completed_at.slice(0, 10) : '—'}</td>
+                <td data-label="Última atualização" className="task-updated-cell">
                   {task.updated_at.slice(0, 10)}
                   <span>por {profileNames[task.updated_by ?? ''] ?? '—'}</span>
                 </td>
-                <td>{attachmentCounts[task.id] ? `📎 ${attachmentCounts[task.id]}` : '—'}</td>
-                <td onClick={(e) => e.stopPropagation()}>
+                <td data-label="Anexos">{attachmentCounts[task.id] ? `📎 ${attachmentCounts[task.id]}` : '—'}</td>
+                <td data-label="Ações" onClick={(e) => e.stopPropagation()}>
                   <div className="row-actions">
                     <button className="danger" onClick={() => handleDelete(task)} type="button">
                       Excluir
