@@ -4,6 +4,7 @@ import { createClient, getClient, updateClient, type ClientInput } from '../../.
 import { CLIENT_ORIGIN_OPTIONS } from '../../../types/database'
 import { useDraftState } from '../../../hooks/useDraftState'
 import { getErrorMessage } from '../../../lib/errorMessage'
+import ClientUsersSection from './ClientUsersSection'
 import '../../../components/common/admin-ui.css'
 
 const emptyForm: ClientInput = {
@@ -164,6 +165,8 @@ export default function ClientForm() {
           </button>
         </div>
       </form>
+
+      {isEdit && id && <ClientUsersSection clientId={id} />}
     </div>
   )
 }

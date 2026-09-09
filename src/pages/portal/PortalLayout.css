@@ -1,0 +1,65 @@
+.portal-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  color: var(--color-text-secondary);
+  background: var(--color-bg);
+}
+
+.portal-shell {
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.portal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-navy);
+  color: #fff;
+}
+
+.portal-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-weight: 700;
+}
+
+.portal-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.portal-user-name {
+  font-size: var(--text-sm);
+  color: var(--color-text-on-navy-muted);
+}
+
+.portal-header-right .admin-icon-btn {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.portal-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+
+@media (max-width: 640px) {
+  .portal-content {
+    padding: var(--space-4);
+  }
+  .portal-header {
+    padding: var(--space-3) var(--space-4);
+  }
+  .portal-user-name {
+    display: none;
+  }
+}

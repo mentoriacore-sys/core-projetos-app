@@ -8,6 +8,9 @@ import ClientForm from './pages/admin/clients/ClientForm'
 import ProjectsList from './pages/admin/projects/ProjectsList'
 import ProjectForm from './pages/admin/projects/ProjectForm'
 import ProjectDetail from './pages/admin/projects/ProjectDetail'
+import PortalLayout from './pages/portal/PortalLayout'
+import PortalHome from './pages/portal/PortalHome'
+import PortalProjectDetail from './pages/portal/PortalProjectDetail'
 
 function App() {
   return (
@@ -27,7 +30,12 @@ function App() {
             <Route path="projetos/:id/editar" element={<ProjectForm />} />
           </Route>
 
-          <Route path="*" element={<Navigate to="/admin" replace />} />
+          <Route path="/portal" element={<PortalLayout />}>
+            <Route index element={<PortalHome />} />
+            <Route path="projetos/:id" element={<PortalProjectDetail />} />
+          </Route>
+
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

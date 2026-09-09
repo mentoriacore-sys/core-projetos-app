@@ -4,7 +4,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import './Login.css'
 
 export default function Login() {
-  const { session, signInWithPassword, signUp } = useAuth()
+  const { session, profile, loading, signInWithPassword, signUp } = useAuth()
   const [mode, setMode] = useState<'login' | 'signup'>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -13,7 +13,8 @@ export default function Login() {
   const [info, setInfo] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
-  if (session) return <Navigate to="/admin" replace />
+  if (session && loading) return <main className="login-screen">Carregando...</main>
+  if (session) return <Navigate to={profile?.role === 'admin' ? '/admin' : '/portal'} replace />
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
