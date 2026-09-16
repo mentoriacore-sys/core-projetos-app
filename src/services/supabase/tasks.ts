@@ -16,6 +16,23 @@ export async function listTasksByProject(projectId: string) {
   return data as Task[]
 }
 
+export interface TaskWithProject extends Task {
+  projects: { id: string; code: string; name: string; clients: { name: string } | null } | null
+  project_stages: { name: string } | null
+}
+
+/** Todas as tarefas de todos os projetos que o usuário tem acesso (via RLS)
+ * — usada na tela "Tarefas" geral (admin) e reaproveitável se o Portal
+ * algum dia quiser uma visão cross-project do cliente. */
+export async function listAllTasks() {
+  const { data, error } = await supabase
+    .from('tasks')
+    .select('*, projects ( id, code, name, clients ( name ) ), project_stages ( name )')
+    .order('expected_date', { ascending: true, nullsFirst: false })
+  if (error) throw error
+  return data as unknown as TaskWithProject[]
+}
+
 export async function getTask(id: string) {
   const { data, error } = await supabase.from('tasks').select('*').eq('id', id).single()
   if (error) throw error

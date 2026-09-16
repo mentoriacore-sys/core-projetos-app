@@ -8,7 +8,7 @@ const MAIN_NAV = [
   { to: '/admin', end: true, icon: 'dashboard', label: 'Dashboard', ready: true },
   { to: '/admin/clientes', icon: 'clients', label: 'Clientes', ready: true },
   { to: '/admin/projetos', icon: 'projects', label: 'Projetos', ready: true },
-  { to: '/admin/tarefas', icon: 'tasks', label: 'Tarefas', ready: false },
+  { to: '/admin/tarefas', icon: 'tasks', label: 'Tarefas', ready: true },
   { to: '/admin/documentos', icon: 'documents', label: 'Documentos', ready: false },
   { to: '/admin/relatorios', icon: 'reports', label: 'Relatórios', ready: false },
   { to: '/admin/configuracoes', icon: 'settings', label: 'Configurações', ready: false },
@@ -126,6 +126,10 @@ export default function AdminLayout() {
         <NavLink to="/admin/projetos" className={({ isActive }) => (isActive ? 'active' : '')}>
           <Icon name="projects" />
           <span>Projetos</span>
+        </NavLink>
+        <NavLink to="/admin/tarefas" className={({ isActive }) => (isActive ? 'active' : '')}>
+          <Icon name="tasks" />
+          <span>Tarefas</span>
         </NavLink>
         <button className="admin-mobile-nav-more" onClick={signOut}>
           <Icon name="logout" />

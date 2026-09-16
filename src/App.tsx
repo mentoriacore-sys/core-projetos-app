@@ -8,6 +8,7 @@ import ClientForm from './pages/admin/clients/ClientForm'
 import ProjectsList from './pages/admin/projects/ProjectsList'
 import ProjectForm from './pages/admin/projects/ProjectForm'
 import ProjectDetail from './pages/admin/projects/ProjectDetail'
+import AllTasksPage from './pages/admin/AllTasksPage'
 import PortalLayout from './pages/portal/PortalLayout'
 import PortalHome from './pages/portal/PortalHome'
 import PortalProjectDetail from './pages/portal/PortalProjectDetail'
@@ -28,6 +29,7 @@ function App() {
             <Route path="projetos/novo" element={<ProjectForm />} />
             <Route path="projetos/:id" element={<ProjectDetail />} />
             <Route path="projetos/:id/editar" element={<ProjectForm />} />
+            <Route path="tarefas" element={<AllTasksPage />} />
           </Route>
 
           <Route path="/portal" element={<PortalLayout />}>
