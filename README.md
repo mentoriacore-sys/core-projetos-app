@@ -32,4 +32,6 @@ Status: Fase 0 a 5 concluídas (produto completo). Redesign visual concluído �
 
 ## Deploy
 
-Publicação em produção via Netlify (`netlify.toml` já configurado), conectado ao repositório GitHub (`main`) com deploy automático a cada push.
+Produção: **https://coreprojetos.netlify.app**
+
+Repositório: [github.com/mentoriacore-sys/core-projetos-app](https://github.com/mentoriacore-sys/core-projetos-app) (branch `main`) conectado ao Netlify (`netlify.toml` já configurado) com deploy automático a cada push.
