@@ -7,7 +7,7 @@ Aplicação **independente** da Base C.O.R.E. — código, repositório, deploy 
 Especificação completa: [`docs/CORE_PROJETOS_SPEC_V1.md`](docs/CORE_PROJETOS_SPEC_V1.md)
 Instruções permanentes de desenvolvimento: [`CLAUDE.md`](CLAUDE.md)
 
-Status: Fase 0 a 5 concluídas (produto completo). Redesign visual em andamento — Fases A a G concluídas (design system, cabeçalho + resumo executivo, modelo de tarefa expandido, nova tabela de tarefas e painel de detalhes, Etapas e demais abas com badges semânticos, responsividade mobile, e o Portal do Cliente com políticas de RLS testadas e isolamento entre clientes comprovado). Falta: tela "Tarefas" geral + polimento final (Fase H).
+Status: Fase 0 a 5 concluídas (produto completo). Redesign visual concluído — Fases A a H (design system, cabeçalho + resumo executivo, modelo de tarefa expandido, nova tabela de tarefas e painel de detalhes, Etapas e demais abas com badges semânticos, responsividade mobile, Portal do Cliente com políticas de RLS testadas e isolamento entre clientes comprovado, e tela "Tarefas" geral entre projetos).
 
 ## Rodando localmente
 
@@ -32,4 +32,4 @@ Status: Fase 0 a 5 concluídas (produto completo). Redesign visual em andamento 
 
 ## Deploy
 
-Publicação em produção via Netlify (`netlify.toml` já configurado). O deploy será conectado ao repositório Git nas fases finais do projeto.
+Publicação em produção via Netlify (`netlify.toml` já configurado), conectado ao repositório GitHub (`main`) com deploy automático a cada push.
