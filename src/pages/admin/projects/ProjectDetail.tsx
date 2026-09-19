@@ -15,6 +15,7 @@ import ScopeChangesTab from './ScopeChangesTab'
 import DecisionsTab from './DecisionsTab'
 import RisksTab from './RisksTab'
 import DocumentsTab from './DocumentsTab'
+import ReportsTab from './ReportsTab'
 import HistoryTab from './HistoryTab'
 import { getErrorMessage } from '../../../lib/errorMessage'
 import '../../../components/common/admin-ui.css'
@@ -31,6 +32,7 @@ type Tab =
   | 'riscos'
   | 'escopo'
   | 'historico'
+  | 'relatorios'
 
 const TABS: { key: Tab; label: string }[] = [
   { key: 'geral', label: 'Visão Geral' },
@@ -43,6 +45,7 @@ const TABS: { key: Tab; label: string }[] = [
   { key: 'riscos', label: 'Riscos' },
   { key: 'escopo', label: 'Alteração de Escopo' },
   { key: 'historico', label: 'Histórico' },
+  { key: 'relatorios', label: 'Relatórios' },
 ]
 
 export default function ProjectDetail() {
@@ -164,6 +167,7 @@ export default function ProjectDetail() {
       {tab === 'riscos' && <RisksTab projectId={id} />}
       {tab === 'escopo' && <ScopeChangesTab projectId={id} />}
       {tab === 'historico' && <HistoryTab projectId={id} />}
+      {tab === 'relatorios' && <ReportsTab projectId={id} />}
     </div>
   )
 }

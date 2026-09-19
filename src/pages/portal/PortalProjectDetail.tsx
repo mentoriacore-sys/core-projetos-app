@@ -11,12 +11,13 @@ import PortalStagesView from './PortalStagesView'
 import PortalTasksView from './PortalTasksView'
 import PortalDeliverablesView from './PortalDeliverablesView'
 import PortalDocumentsView from './PortalDocumentsView'
+import PortalReportsView from './PortalReportsView'
 import HistoryTab from '../admin/projects/HistoryTab'
 import { getErrorMessage } from '../../lib/errorMessage'
 import '../../components/common/admin-ui.css'
 import '../admin/projects/ProjectDetail.css'
 
-type Tab = 'geral' | 'etapas' | 'tarefas' | 'entregaveis' | 'documentos' | 'historico'
+type Tab = 'geral' | 'etapas' | 'tarefas' | 'entregaveis' | 'documentos' | 'historico' | 'relatorios'
 
 const TABS: { key: Tab; label: string }[] = [
   { key: 'geral', label: 'Visão Geral' },
@@ -25,6 +26,7 @@ const TABS: { key: Tab; label: string }[] = [
   { key: 'entregaveis', label: 'Entregáveis' },
   { key: 'documentos', label: 'Documentos' },
   { key: 'historico', label: 'Histórico' },
+  { key: 'relatorios', label: 'Relatórios' },
 ]
 
 export default function PortalProjectDetail() {
@@ -102,6 +104,7 @@ export default function PortalProjectDetail() {
       {tab === 'entregaveis' && <PortalDeliverablesView projectId={id} onChange={refresh} />}
       {tab === 'documentos' && <PortalDocumentsView projectId={id} />}
       {tab === 'historico' && <HistoryTab projectId={id} />}
+      {tab === 'relatorios' && <PortalReportsView projectId={id} />}
     </div>
   )
 }

@@ -296,3 +296,47 @@ export interface ProjectHistoryEntry {
   visibility: 'internal' | 'client' | 'both'
   created_at: string
 }
+
+export const REPORT_ITEM_TYPES = [
+  'concluido_no_periodo',
+  'em_andamento',
+  'aguardando_cliente',
+  'proxima_entrega',
+  'risco',
+  'decisao',
+  'proximos_passos',
+  'observacoes',
+] as const
+
+export const REPORT_ITEM_TYPE_LABELS: Record<(typeof REPORT_ITEM_TYPES)[number], string> = {
+  concluido_no_periodo: 'Concluído no período',
+  em_andamento: 'Em andamento',
+  aguardando_cliente: 'Aguardando cliente',
+  proxima_entrega: 'Próximas entregas',
+  risco: 'Riscos',
+  decisao: 'Decisões',
+  proximos_passos: 'Próximos passos',
+  observacoes: 'Observações',
+}
+
+export interface ProjectReport {
+  id: string
+  project_id: string
+  period_start: string | null
+  period_end: string | null
+  status: 'Rascunho' | 'Publicado'
+  executive_summary: string | null
+  content: Record<string, unknown> | null
+  version: number
+  published_at: string | null
+  created_by: string | null
+  created_at: string
+}
+
+export interface ReportItem {
+  id: string
+  report_id: string
+  item_type: (typeof REPORT_ITEM_TYPES)[number]
+  description: string
+  created_at: string
+}

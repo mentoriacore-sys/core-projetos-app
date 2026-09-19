@@ -9,8 +9,8 @@ const MAIN_NAV = [
   { to: '/admin/clientes', icon: 'clients', label: 'Clientes', ready: true },
   { to: '/admin/projetos', icon: 'projects', label: 'Projetos', ready: true },
   { to: '/admin/tarefas', icon: 'tasks', label: 'Tarefas', ready: true },
-  { to: '/admin/documentos', icon: 'documents', label: 'Documentos', ready: false },
-  { to: '/admin/relatorios', icon: 'reports', label: 'Relatórios', ready: false },
+  { to: '/admin/documentos', icon: 'documents', label: 'Documentos', ready: true },
+  { to: '/admin/relatorios', icon: 'reports', label: 'Relatórios', ready: true },
   { to: '/admin/configuracoes', icon: 'settings', label: 'Configurações', ready: false },
 ] as const
 

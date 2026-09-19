@@ -14,6 +14,21 @@ export async function listFiles(projectId: string) {
   return data as ProjectFile[]
 }
 
+export interface ProjectFileWithProject extends ProjectFile {
+  projects: { id: string; code: string; name: string; clients: { name: string } | null } | null
+}
+
+/** Todos os documentos de todos os projetos que o usuário tem acesso (via RLS)
+ * — usada na tela "Documentos" geral (admin). */
+export async function listAllFiles() {
+  const { data, error } = await supabase
+    .from('project_files')
+    .select('*, projects ( id, code, name, clients ( name ) )')
+    .order('file_date', { ascending: false })
+  if (error) throw error
+  return data as unknown as ProjectFileWithProject[]
+}
+
 export async function createFile(input: Partial<ProjectFileInput>) {
   const { data, error } = await supabase.from('project_files').insert(input).select().single()
   if (error) throw error
