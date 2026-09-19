@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createStage, deleteStage, listStages, updateStage, type StageInput } from '../../../services/supabase/stages'
 import { STAGE_STATUS_OPTIONS, VISIBILITY_OPTIONS } from '../../../types/database'
 import type { ProjectStage } from '../../../types/database'
@@ -33,6 +33,11 @@ export default function StagesTab({ projectId, onProgressChange }: Props) {
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState<StageInput>({ ...emptyForm, project_id: projectId })
+  const formRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (showForm) formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, [showForm])
 
   async function reload() {
     setLoading(true)
@@ -116,7 +121,7 @@ export default function StagesTab({ projectId, onProgressChange }: Props) {
       </div>
 
       {showForm && (
-        <div className="inline-form">
+        <div className="inline-form" ref={formRef}>
           <div className="inline-form-grid">
             <label>
               Nome *

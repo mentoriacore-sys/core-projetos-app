@@ -5,6 +5,7 @@ import { listProfiles } from '../../../services/supabase/profiles'
 import { STAGE_STATUS_OPTIONS, VISIBILITY_OPTIONS, RESPONSIBILITY_OPTIONS } from '../../../types/database'
 import type { ProjectStage, Task } from '../../../types/database'
 import { getErrorMessage } from '../../../lib/errorMessage'
+import { formatDateTimeBR } from '../../../lib/formatDate'
 import { ResponsibleBadge, DueDateBadge } from '../../../components/common/Badge'
 import TaskDetailDrawer from './TaskDetailDrawer'
 
@@ -237,6 +238,7 @@ export default function TasksTab({ projectId, onProgressChange }: Props) {
                       </option>
                     ))}
                   </select>
+                  <span className="status-updated-at">atualizado {formatDateTimeBR(task.updated_at)}</span>
                 </td>
                 <td data-label="Conclusão">{task.completed_at ? task.completed_at.slice(0, 10) : '—'}</td>
                 <td data-label="Última atualização" className="task-updated-cell">

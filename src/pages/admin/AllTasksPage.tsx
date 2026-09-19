@@ -7,6 +7,7 @@ import type { Task } from '../../types/database'
 import { ResponsibleBadge, DueDateBadge } from '../../components/common/Badge'
 import TaskDetailDrawer from './projects/TaskDetailDrawer'
 import { getErrorMessage } from '../../lib/errorMessage'
+import { formatDateTimeBR } from '../../lib/formatDate'
 import '../../components/common/admin-ui.css'
 import './projects/ProjectDetail.css'
 
@@ -154,6 +155,7 @@ export default function AllTasksPage() {
                       </option>
                     ))}
                   </select>
+                  <span className="status-updated-at">atualizado {formatDateTimeBR(task.updated_at)}</span>
                 </td>
                 <td data-label="Anexos">{attachmentCounts[task.id] ? `📎 ${attachmentCounts[task.id]}` : '—'}</td>
               </tr>
