@@ -8,7 +8,7 @@ import {
   updateTask,
   uploadAttachment,
 } from '../../../services/supabase/tasks'
-import { SCHEDULE_IMPACT_OPTIONS } from '../../../types/database'
+import { RESPONSIBILITY_OPTIONS, SCHEDULE_IMPACT_OPTIONS, VISIBILITY_OPTIONS } from '../../../types/database'
 import type { Task, TaskAttachment, TaskComment } from '../../../types/database'
 import { StatusBadge } from '../../../components/common/Badge'
 import { getErrorMessage } from '../../../lib/errorMessage'
@@ -28,6 +28,15 @@ export default function TaskDetailDrawer({ task, profileNames, onClose, onChange
   const [error, setError] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [editing, setEditing] = useState(false)
+  const [editForm, setEditForm] = useState({
+    title: task.title,
+    description: task.description ?? '',
+    responsible: task.responsible ?? '',
+    priority: task.priority ?? '',
+    expected_date: task.expected_date ?? '',
+    visibility: task.visibility,
+  })
 
   async function reload() {
     try {
@@ -105,6 +114,23 @@ export default function TaskDetailDrawer({ task, profileNames, onClose, onChange
     onChange()
   }
 
+  async function handleSaveEdit() {
+    try {
+      await updateTask(task.id, {
+        title: editForm.title,
+        description: editForm.description || null,
+        responsible: (editForm.responsible || null) as Task['responsible'],
+        priority: editForm.priority || null,
+        expected_date: editForm.expected_date || null,
+        visibility: editForm.visibility,
+      })
+      setEditing(false)
+      onChange()
+    } catch (err) {
+      setError(getErrorMessage(err))
+    }
+  }
+
   return (
     <div className="drawer-backdrop" onClick={onClose}>
       <div className="drawer-panel" onClick={(e) => e.stopPropagation()}>
@@ -120,32 +146,96 @@ export default function TaskDetailDrawer({ task, profileNames, onClose, onChange
 
         {error && <p className="form-error">{error}</p>}
 
-        {task.description && <p className="drawer-description">{task.description}</p>}
-
-        {task.is_blocking && (
-          <div className="drawer-blocking-note">
-            Esta tarefa é necessária para que a próxima atividade possa começar.
+        {editing ? (
+          <div className="drawer-section inline-form-grid">
+            <label>
+              Título *
+              <input value={editForm.title} onChange={(e) => setEditForm({ ...editForm, title: e.target.value })} />
+            </label>
+            <label>
+              Descrição
+              <textarea
+                rows={2}
+                value={editForm.description}
+                onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+              />
+            </label>
+            <label>
+              Responsável
+              <select value={editForm.responsible} onChange={(e) => setEditForm({ ...editForm, responsible: e.target.value })}>
+                <option value="">—</option>
+                {RESPONSIBILITY_OPTIONS.map((r) => (
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Prioridade
+              <input value={editForm.priority} onChange={(e) => setEditForm({ ...editForm, priority: e.target.value })} />
+            </label>
+            <label>
+              Prazo
+              <input
+                type="date"
+                value={editForm.expected_date}
+                onChange={(e) => setEditForm({ ...editForm, expected_date: e.target.value })}
+              />
+            </label>
+            <label>
+              Visibilidade
+              <select
+                value={editForm.visibility}
+                onChange={(e) => setEditForm({ ...editForm, visibility: e.target.value as Task['visibility'] })}
+              >
+                {VISIBILITY_OPTIONS.map((v) => (
+                  <option key={v.value} value={v.value}>
+                    {v.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="row-actions">
+              <button className="btn-primary" onClick={handleSaveEdit} type="button">
+                Salvar
+              </button>
+              <button onClick={() => setEditing(false)} type="button">
+                Cancelar
+              </button>
+            </div>
           </div>
+        ) : (
+          <>
+            {task.description && <p className="drawer-description">{task.description}</p>}
+            {task.is_blocking && (
+              <div className="drawer-blocking-note">
+                Esta tarefa é necessária para que a próxima atividade possa começar.
+              </div>
+            )}
+            <div className="drawer-quick-actions">
+              {task.status !== 'Concluída' ? (
+                <button className="btn-primary" onClick={handleMarkDone}>
+                  ✓ Marcar como concluída
+                </button>
+              ) : (
+                <button className="btn-secondary" onClick={handleReopen}>
+                  Reabrir tarefa
+                </button>
+              )}
+              <button className="btn-secondary" onClick={() => setEditing(true)}>
+                ✎ Editar
+              </button>
+              <button className="btn-secondary" onClick={handleToggleBlocking}>
+                {task.is_blocking ? 'Remover bloqueadora' : 'Marcar como bloqueadora'}
+              </button>
+              <button className="btn-secondary" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                📎 {uploading ? 'Enviando...' : 'Anexar arquivo'}
+              </button>
+              <input ref={fileInputRef} type="file" hidden onChange={handleUpload} />
+            </div>
+          </>
         )}
-
-        <div className="drawer-quick-actions">
-          {task.status !== 'Concluída' ? (
-            <button className="btn-primary" onClick={handleMarkDone}>
-              ✓ Marcar como concluída
-            </button>
-          ) : (
-            <button className="btn-secondary" onClick={handleReopen}>
-              Reabrir tarefa
-            </button>
-          )}
-          <button className="btn-secondary" onClick={handleToggleBlocking}>
-            {task.is_blocking ? 'Remover bloqueadora' : 'Marcar como bloqueadora'}
-          </button>
-          <button className="btn-secondary" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
-            📎 {uploading ? 'Enviando...' : 'Anexar arquivo'}
-          </button>
-          <input ref={fileInputRef} type="file" hidden onChange={handleUpload} />
-        </div>
 
         <div className="drawer-section">
           <span className="drawer-section-label">Impacto no cronograma</span>
