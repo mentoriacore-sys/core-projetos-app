@@ -102,7 +102,7 @@ export default function PortalTicketsView({ project }: Props) {
 
       <div className="page-header">
         <h2 style={{ fontSize: '1rem', margin: 0 }}>Chamados</h2>
-        <button className="btn-primary" onClick={() => setShowForm(true)} disabled={!windowOpen} title={!windowOpen ? 'Período de acompanhamento encerrado' : ''}>
+        <button className="btn-primary" onClick={() => setShowForm(true)}>
           + Abrir chamado
         </button>
       </div>

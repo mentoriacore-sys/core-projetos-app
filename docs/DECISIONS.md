@@ -35,3 +35,15 @@ Ao completar as telas do menu que ainda estavam "em breve" (Documentos, Relatór
 **O que existe hoje no lugar de "Configurações":** o SLA dos chamados (seção 18 do adendo, "deverá ficar configurável, não hardcode") já está numa tabela própria (`sla_config`) editável via SQL/painel do Supabase — só não tem tela dedicada no app ainda.
 
 **Como aplicar:** antes de construir qualquer uma das duas, perguntar à Andréia o que ela espera ver ali (ex.: Configurações — dados da conta, preferências de notificação, gestão de usuários da equipe, o próprio SLA de chamados? Central de Ajuda — FAQ estático, documentação, contato?) e registrar a resposta aqui como nova decisão antes de implementar.
+
+## 2026-09-20 — Botão "Abrir chamado" não é bloqueado pelo fim do acompanhamento
+
+A spec (adendo, seção 32) manda desabilitar o botão "Abrir chamado" quando `support_ends_at` já passou. Foi implementado assim inicialmente (migration `0011_support_tickets.sql`).
+
+**Decisão:** removido esse bloqueio — migration `0015_tickets_no_window_block.sql`. O botão "+ Abrir chamado" no Portal do Cliente agora fica sempre ativo, independente da data.
+
+**Motivo (Andréia):** se algo surge bem no fim do período de acompanhamento e exige mais tempo de correção/implantação, bloquear o botão tira do cliente justamente a oportunidade de comunicar isso na hora que mais importa.
+
+**Por que isso não abre brecha de segurança:** o corte de acesso de verdade continua existindo e é outro mecanismo — `client_users.access_status`. Quando a administradora desativa o acesso do cliente (seção 4 da spec), `my_client_ids()` fica vazia e **todas** as políticas de RLS do cliente deixam de retornar qualquer linha, incluindo a de abrir chamado. Ou seja: enquanto o acesso ao Portal estiver ativo, o cliente pode abrir chamado a qualquer momento; quando a administradora encerrar o acesso, ele perde tudo de uma vez (não só o botão).
+
+**Como aplicar:** o bloco "Acompanhamento" no Portal (datas, avisos de 7/2 dias) continua sendo exibido normalmente, é só informativo — não afeta mais se o botão fica ativo ou não. Se precisar reintroduzir algum bloqueio por data no futuro, discutir com a Andréia antes.
