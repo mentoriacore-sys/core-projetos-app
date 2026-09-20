@@ -25,3 +25,13 @@ A Andréia trabalha com uma pasta por cliente/projeto contendo os documentos já
 **Por que não uma automação completa desde já:** o passo de "ler documentos não estruturados e extrair dados" é inerentemente um trabalho de interpretação (mesma natureza do que a spec exclui em "IA complexa" — seção 74). Como cada projeto é diferente, esse passo continua precisando de uma sessão do Claude Code ativa. O que ficou pronto é a parte que *pode* ser reaproveitada por uma automação futura: `scripts/import-project.mjs` grava um projeto completo (cliente, etapas, tarefas, entregáveis) a partir de um JSON estruturado — qualquer automação que produza esse mesmo formato pode chamá-lo, sem depender do Claude.
 
 **Como aplicar:** ao receber um pedido de cadastro de projeto a partir de pasta, seguir `docs/PROCESSO_IMPORTACAO_PROJETO.md`. Nunca gravar sem antes mostrar o resumo extraído para aprovação da Andréia.
+
+## 2026-09-20 — Pendência: telas "Configurações" e "Central de Ajuda" não construídas
+
+Ao completar as telas do menu que ainda estavam "em breve" (Documentos, Relatórios e Central de Chamados), essas duas ficaram de fora.
+
+**Motivo:** diferente das outras, `CORE_PROJETOS_SPEC_V1.md` não tem nenhuma seção definindo o que essas telas devem conter. Construí-las agora seria inventar escopo/regra de negócio (proibido pela regra 3 do `CLAUDE.md`). A única menção a "Configuração" no documento é como categoria de chamado (adendo, seção 7), não uma tela de configurações do sistema.
+
+**O que existe hoje no lugar de "Configurações":** o SLA dos chamados (seção 18 do adendo, "deverá ficar configurável, não hardcode") já está numa tabela própria (`sla_config`) editável via SQL/painel do Supabase — só não tem tela dedicada no app ainda.
+
+**Como aplicar:** antes de construir qualquer uma das duas, perguntar à Andréia o que ela espera ver ali (ex.: Configurações — dados da conta, preferências de notificação, gestão de usuários da equipe, o próprio SLA de chamados? Central de Ajuda — FAQ estático, documentação, contato?) e registrar a resposta aqui como nova decisão antes de implementar.
