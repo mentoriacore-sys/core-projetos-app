@@ -40,6 +40,13 @@ const STATUS_TONE: Record<string, Tone> = {
   'Encerrado': 'neutral',
   'Aberto': 'info',
   'Resolvida': 'success',
+  'Resolvido': 'success',
+  'Em análise': 'warning',
+  'Em atendimento': 'info',
+  'P1': 'danger',
+  'P2': 'orange',
+  'P3': 'warning',
+  'P4': 'neutral',
 }
 
 export function StatusBadge({ status }: { status: string | null | undefined }) {

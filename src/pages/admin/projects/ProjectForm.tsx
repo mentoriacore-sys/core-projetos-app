@@ -37,6 +37,10 @@ const emptyForm: ProjectInput = {
   health: null,
   priority: '',
   current_responsibility: null,
+  execution_completed_at: null,
+  support_started_at: null,
+  support_ends_at: null,
+  support_status: null,
 }
 
 export default function ProjectForm() {
@@ -81,6 +85,10 @@ export default function ProjectForm() {
             health: p.health,
             priority: p.priority,
             current_responsibility: p.current_responsibility,
+            execution_completed_at: p.execution_completed_at,
+            support_started_at: p.support_started_at,
+            support_ends_at: p.support_ends_at,
+            support_status: p.support_status,
           })
         }
       })
@@ -210,6 +218,28 @@ export default function ProjectForm() {
               onChange={(e) => update('expected_end_date', e.target.value || null)}
             />
           </label>
+          <label>
+            Conclusão da execução
+            <input
+              type="date"
+              value={form.execution_completed_at ?? ''}
+              onChange={(e) => update('execution_completed_at', e.target.value || null)}
+            />
+          </label>
+          <label>
+            Fim do acompanhamento (30 dias)
+            <input
+              type="date"
+              value={form.support_ends_at ?? ''}
+              onChange={(e) => update('support_ends_at', e.target.value || null)}
+            />
+          </label>
+          {form.execution_completed_at && (
+            <p className="full-width" style={{ fontSize: '0.78rem', color: 'var(--color-text-secondary)', margin: '-0.5rem 0 0.5rem' }}>
+              Ao definir a conclusão da execução, o fim do acompanhamento é calculado automaticamente como +30 dias
+              corridos — ajuste manualmente aqui se houver condição contratual diferente.
+            </p>
+          )}
 
           <label className="full-width">
             Descrição

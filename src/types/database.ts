@@ -73,6 +73,10 @@ export interface Project {
   priority: string | null
   progress: number
   current_responsibility: (typeof RESPONSIBILITY_OPTIONS)[number] | null
+  execution_completed_at: string | null
+  support_started_at: string | null
+  support_ends_at: string | null
+  support_status: string | null
   created_at: string
   updated_at: string
 }
@@ -339,4 +343,88 @@ export interface ReportItem {
   item_type: (typeof REPORT_ITEM_TYPES)[number]
   description: string
   created_at: string
+}
+
+export const TICKET_CATEGORY_OPTIONS = [
+  'Funcionalidade',
+  'Automação',
+  'Integração',
+  'Acesso',
+  'Documento',
+  'Processo',
+  'Configuração',
+  'Entregável',
+  'Outro',
+] as const
+
+export const TICKET_IMPACT_OPTIONS = ['Baixo', 'Médio', 'Alto', 'Bloqueia minha operação'] as const
+
+export const TICKET_PRIORITY_OPTIONS = ['P1', 'P2', 'P3', 'P4'] as const
+
+export const TICKET_PRIORITY_LABELS: Record<(typeof TICKET_PRIORITY_OPTIONS)[number], string> = {
+  P1: 'P1 — Crítica',
+  P2: 'P2 — Alta',
+  P3: 'P3 — Normal',
+  P4: 'P4 — Baixa',
+}
+
+export const TICKET_STATUS_OPTIONS = [
+  'Aberto',
+  'Em análise',
+  'Em atendimento',
+  'Aguardando cliente',
+  'Resolvido',
+  'Encerrado',
+  'Cancelado',
+] as const
+
+export interface SupportTicket {
+  id: string
+  ticket_code: string
+  project_id: string
+  client_id: string
+  opened_by: string | null
+  category: (typeof TICKET_CATEGORY_OPTIONS)[number] | null
+  title: string
+  description: string
+  reported_impact: (typeof TICKET_IMPACT_OPTIONS)[number] | null
+  priority: (typeof TICKET_PRIORITY_OPTIONS)[number] | null
+  status: (typeof TICKET_STATUS_OPTIONS)[number]
+  opened_at: string
+  first_response_at: string | null
+  due_at: string | null
+  resolved_at: string | null
+  closed_at: string | null
+  assigned_to: string | null
+  resolution_summary: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface TicketMessage {
+  id: string
+  ticket_id: string
+  author_id: string | null
+  message: string
+  visibility: 'cliente' | 'interno'
+  created_at: string
+}
+
+export interface TicketAttachment {
+  id: string
+  ticket_id: string
+  message_id: string | null
+  uploaded_by: string | null
+  storage_path: string
+  file_name: string
+  mime_type: string
+  file_size: number
+  created_at: string
+}
+
+export interface SlaConfig {
+  priority: (typeof TICKET_PRIORITY_OPTIONS)[number]
+  label: string
+  first_response_hours: number
+  updated_at: string
 }

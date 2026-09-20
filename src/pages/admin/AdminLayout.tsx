@@ -15,7 +15,7 @@ const MAIN_NAV = [
 ] as const
 
 const SUPPORT_NAV = [
-  { to: '/admin/chamados', icon: 'support', label: 'Chamados', ready: false },
+  { to: '/admin/chamados', icon: 'support', label: 'Chamados', ready: true },
   { to: '/admin/ajuda', icon: 'help', label: 'Central de Ajuda', ready: false },
 ] as const
 
@@ -72,12 +72,19 @@ export default function AdminLayout() {
           )}
 
           <span className="admin-nav-heading">{!collapsed && 'Suporte'}</span>
-          {SUPPORT_NAV.map((item) => (
-            <span key={item.to} className="admin-nav-soon" title="Em breve">
-              <Icon name={item.icon} />
-              {!collapsed && <span>{item.label}</span>}
-            </span>
-          ))}
+          {SUPPORT_NAV.map((item) =>
+            item.ready ? (
+              <NavLink key={item.to} to={item.to} className={({ isActive }) => (isActive ? 'active' : '')}>
+                <Icon name={item.icon} />
+                {!collapsed && <span>{item.label}</span>}
+              </NavLink>
+            ) : (
+              <span key={item.to} className="admin-nav-soon" title="Em breve">
+                <Icon name={item.icon} />
+                {!collapsed && <span>{item.label}</span>}
+              </span>
+            ),
+          )}
         </nav>
 
         <div className="admin-user-card">

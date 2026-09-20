@@ -11,6 +11,7 @@ import ProjectDetail from './pages/admin/projects/ProjectDetail'
 import AllTasksPage from './pages/admin/AllTasksPage'
 import AllDocumentsPage from './pages/admin/AllDocumentsPage'
 import AllReportsPage from './pages/admin/AllReportsPage'
+import AllTicketsPage from './pages/admin/tickets/AllTicketsPage'
 import PortalLayout from './pages/portal/PortalLayout'
 import PortalHome from './pages/portal/PortalHome'
 import PortalProjectDetail from './pages/portal/PortalProjectDetail'
@@ -34,6 +35,7 @@ function App() {
             <Route path="tarefas" element={<AllTasksPage />} />
             <Route path="documentos" element={<AllDocumentsPage />} />
             <Route path="relatorios" element={<AllReportsPage />} />
+            <Route path="chamados" element={<AllTicketsPage />} />
           </Route>
 
           <Route path="/portal" element={<PortalLayout />}>
